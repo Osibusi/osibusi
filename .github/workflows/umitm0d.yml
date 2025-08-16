@@ -1,4 +1,4 @@
-name: ÜmitM0d IPTV Otomatik
+name: Osibusi IPTV Otomatik
 
 on:
   schedule:
@@ -21,9 +21,9 @@ jobs:
         run: |
           pip install requests
 
-      - name: ÜmitM0d Script Çalıştır
+      - name: OSIBUSI Script Çalıştır
         run: |
-          python umitm0d.py
+          python osibusi.py
 
       - name: Playlist'i Commit Et
         run: |
