@@ -75,25 +75,25 @@ class Dengetv54Manager:
         print(f"⚠️ Dosya yok, yeni oluşturuluyor: {self.ana_m3u_dosyasi}")
         with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as f:
             f.write("#EXTM3U\n") 
-        
-        with open(self.ana_m3u_dosyasi, "r", encoding='utf-8') as dosya:
-            ana_icerik = dosya.read()
 
-        lines = ana_icerik.split("\n")
-        filtered_lines = []
+    with open(self.ana_m3u_dosyasi, "r", encoding='utf-8') as dosya:
+        ana_icerik = dosya.read()
+
+    lines = ana_icerik.split("\n")
+    filtered_lines = []
+    skip = False
+    for line in lines:
+        if line.startswith("#EXTINF") and 'group-title="Dengetv54"' in line:
+            skip = True
+            continue
+        if skip and line and not line.startswith("#EXTINF"):
+            continue
         skip = False
-        for line in lines:
-            if line.startswith("#EXTINF") and 'group-title="Dengetv54"' in line:
-                skip = True
-                continue
-            if skip and line and not line.startswith("#EXTINF"):
-                continue
-            skip = False
-            filtered_lines.append(line)
+        filtered_lines.append(line)
 
-        yeni_dosya_icerik = "\n".join(filtered_lines) + "\n\n" + yeni_icerik
-        with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as dosya:
-            dosya.write(yeni_dosya_icerik)
+    yeni_dosya_icerik = "\n".join(filtered_lines) + "\n\n" + yeni_icerik
+    with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as dosya:
+        dosya.write(yeni_dosya_icerik)
 
     def calistir(self):
         self.referer_url = self.find_working_domain()
