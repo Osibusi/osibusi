@@ -19,7 +19,7 @@ jobs:
 
       - name: Bağımlılıkları Kur
         run: |
-          pip install requests
+          pip install requests httpx
 
       - name: OSIBUSI Script Çalıştır
         run: |
