@@ -9,10 +9,10 @@ from datetime import datetime
 from git import Repo
 import os
 
-if os.path.exists('NeonSpor/NeonSpor.m3u8'):
-    os.system('git add NeonSpor/NeonSpor.m3u8')
-else:
-    print("Dosya bulunamadı: NeonSpor/NeonSpor.m3u8")
+os.system('git add neon.m3u')
+os.system('git commit -m "Add neon.m3u dosyası"')
+os.system('git push')
+
 
 
   
