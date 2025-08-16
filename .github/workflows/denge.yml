@@ -23,7 +23,7 @@ jobs:
 
       - name: OSIBUSI Script Çalıştır
         run: |
-          python osibusi.py
+          python dengexyz.py
 
       - name: Playlist'i Commit Et
         run: |
