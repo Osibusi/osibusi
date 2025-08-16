@@ -1,4 +1,4 @@
-name: Osibusi denge XYZ IPTV Otomatik
+name: Osibusi xyzvs IPTV Otomatik
 
 on:
   schedule:
@@ -19,21 +19,21 @@ jobs:
 
       - name: Bağımlılıkları Kur
         run: |
-          pip install requests httpx
+          pip install requests
 
       - name: OSIBUSI Script Çalıştır
         run: |
-          python dengexyz.py
+          python osibusi.py
 
-   - name: Playlist'i Commit Et
-  run: |
-    git config --global user.name "github-actions[bot]"
-    git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Playlist'i Commit Et
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add OsibusidengeXYZ.m3u
+          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
+          git push
 
-    if [ -f "OsibusidengeXYZ.m3u" ]; then
-      git add OsibusidengeXYZ.m3u
-      git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-      git push
-    else
-      echo "❌ OsibusidengeXYZ.m3u bulunamadı, commit yapılmadı."
-   
+          else
+          echo "❌ OsibusidengeXYZ.m3u bulunamadı, commit yapılmadı."
+
+
