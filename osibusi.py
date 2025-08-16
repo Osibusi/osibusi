@@ -88,7 +88,7 @@ def generate_m3u(base_url, referer, user_agent):
     lines = ["#EXTM3U"]
     print(f"{YELLOW}[*]{RESET} Kanallar ekleniyor...")
     for idx, k in enumerate(kanallar, start=1):
-        kanal_mod = f"UmitM0d {k['kanal_adi']}"
+        kanal_mod = f"Osibusi {k['kanal_adi']}"
         print(f"  {GREEN}✔{RESET} {str(idx).zfill(2)}. {kanal_mod}")
         lines.append(f'#EXTINF:-1 tvg-id="{k["tvg_id"]}" tvg-name="{kanal_mod}",{kanal_mod}')
         lines.append(f'#EXTVLCOPT:http-user-agent={user_agent}')
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     user_agent = "Mozilla/5.0"
 
     print(f"{CYAN}{BOLD}╔══════════════════════════════════════╗")
-    print(f"║           ÜmitM0d IPTV Script        ║")
+    print(f"║          Osibusi IPTV Script        ║")
     print(f"╚══════════════════════════════════════╝{RESET}\n")
 
     site_url = get_site_url()
