@@ -1,4 +1,4 @@
-from httpx import Client
+yfrom httpx import Client
 import re
 import os
 from urllib.parse import urlparse
@@ -40,7 +40,7 @@ class XYZsportsManager:
         m3u = ["#EXTM3U"]
         for cid in self.channel_ids:
             channel_name = cid.replace("-", " ").title()
-            m3u.append(f'#EXTINF:-1 group-title="Osibusi",{channel_name}')
+            m3u.append(f'#EXTINF:-1 group-title="Berat ",{channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(f'#EXTVLCOPT:http-referrer={referer_url}')
             m3u.append(f'{base_stream_url}{cid}/playlist.m3u8')
