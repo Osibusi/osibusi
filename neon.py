@@ -7,7 +7,10 @@ import os
 import re
 from datetime import datetime
 from git import Repo
-
+     git add NeonSpor/NeonSpor.m3u8
+     git commit -m "Add/update NeonSpor.m3u8"
+     git push
+  
 class StreamUpdater:
     def __init__(self):
         self.session = requests.Session()
