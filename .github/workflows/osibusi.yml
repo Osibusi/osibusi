@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Manuel çalıştırma
 
 jobs:
-  run-umitmod:
+  run-osibusi:
     runs-on: ubuntu-latest
     steps:
       - name: Repo'yu Klonla
