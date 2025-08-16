@@ -36,4 +36,4 @@ jobs:
       git push
     else
       echo "❌ OsibusidengeXYZ.m3u bulunamadı, commit yapılmadı."
-    fi
+   
