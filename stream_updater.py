@@ -7,15 +7,7 @@ import os
 import re
 from datetime import datetime
 from git import Repo
-import os
 
-os.system('git add neon.m3u')
-os.system('git commit -m "Add neon.m3u dosyası"')
-os.system('git push')
-
-
-
-  
 class StreamUpdater:
     def __init__(self):
         self.session = requests.Session()
@@ -25,8 +17,7 @@ class StreamUpdater:
         })
         
         self.repo_path = os.getenv('GITHUB_WORKSPACE')
-        # Daha sağlıklı path yapısı
-        self.m3u8_path = os.path.join(self.repo_path, 'NeonSpor', 'NeonSpor.m3u8')
+        self.m3u8_path = os.path.join(self.repo_path, 'NeonSpor/NeonSpor.m3u8')
 
     def extract_domain_from_script(self, script_content):
         try:
@@ -74,10 +65,7 @@ class StreamUpdater:
             if response.status_code == 200:
                 data = response.json()
                 new_domain = data.get('baseurl', '').rstrip('/')
-                if new_domain:
-                    return new_domain
-                else:
-                    logging.error("Yeni domain değeri boş")
+                return new_domain
             else:
                 logging.error(f"Domain API yanıt vermedi. Status code: {response.status_code}")
         except Exception as e:
@@ -94,28 +82,26 @@ class StreamUpdater:
 
     def update_m3u8_content(self, content, new_domain):
         try:
-            current_domain_pattern = r'https?://[^/]+/'
-
-            matches = list(re.finditer(current_domain_pattern, content))
+            current_domain_pattern = r'(https?://[^/]+/)(?=.*yayin)'
+            
+            matches = re.finditer(current_domain_pattern, content)
             
             if not matches:
                 logging.info("'yayin' içeren URL bulunamadı. Güncelleme gerekmiyor.")
                 return content
-
+    
             updated_content = content
             for match in matches:
-                current_domain = match.group(0)  # grup 0 tam eşleşme
-                if 'yayin' not in current_domain:
-                    continue
+                current_domain = match.group(1)
                 
-                if current_domain.rstrip('/') == new_domain:
+                if current_domain == new_domain + '/':
                     continue
                 
                 updated_content = updated_content.replace(current_domain, new_domain + '/')
                 logging.info(f"Domain güncellendi: {current_domain} -> {new_domain}/")
-
+    
             return updated_content
-
+    
         except Exception as e:
             logging.error(f"İçerik güncelleme hatası: {str(e)}")
             return content
@@ -162,9 +148,6 @@ def main():
     )
     updater = StreamUpdater()
     updater.update_streams()
-
-if __name__ == "__main__":
-    main()
 
 if __name__ == "__main__":
     main()
