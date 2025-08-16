@@ -7,7 +7,7 @@ import os
 import re
 from datetime import datetime
 from git import Repo
-    import os
+import os
 os.system('git add NeonSpor/NeonSpor.m3u8')
 
   
