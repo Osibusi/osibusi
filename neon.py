@@ -8,7 +8,12 @@ import re
 from datetime import datetime
 from git import Repo
 import os
-os.system('git add NeonSpor/NeonSpor.m3u8')
+
+if os.path.exists('NeonSpor/NeonSpor.m3u8'):
+    os.system('git add NeonSpor/NeonSpor.m3u8')
+else:
+    print("Dosya bulunamadı: NeonSpor/NeonSpor.m3u8")
+
 
   
 class StreamUpdater:
