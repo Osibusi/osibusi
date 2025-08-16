@@ -88,7 +88,7 @@ def generate_m3u(base_url, referer, user_agent):
     lines = ["#EXTM3U"]
     print(f"{YELLOW}[*]{RESET} Kanallar ekleniyor...")
     for idx, k in enumerate(kanallar, start=1):
-        kanal_mod = f"SOKUK {k['kanal_adi']}"
+        kanal_mod = f"Berat {k['kanal_adi']}"
         print(f"  {GREEN}✔{RESET} {str(idx).zfill(2)}. {kanal_mod}")
         lines.append(f'#EXTINF:-1 tvg-id="{k["tvg_id"]}" tvg-name="{kanal_mod}",{kanal_mod}')
         lines.append(f'#EXTVLCOPT:http-user-agent={user_agent}')
