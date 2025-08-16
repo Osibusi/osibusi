@@ -1,0 +1,38 @@
+name: Osibusi NEON Otomatik
+
+on:
+  schedule:
+    - cron: "0 */3 * * *" # Her 3 saatte bir
+  workflow_dispatch: # Manuel çalıştırma
+
+jobs:
+  run-osibusi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo'yu Klonla
+        uses: actions/checkout@v4
+
+      - name: Python Kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Bağımlılıkları Kur
+        run: |
+          pip install requests httpx
+
+      - name: OSIBUSI Script Çalıştır
+        run: |
+          python neon.py
+
+      - name: Playlist'i Commit Et
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add neon.m3u
+          if git diff --cached --quiet; then
+            echo "❌ neon.m3u bulunamadı, commit yapılmadı."
+          else
+            git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+          fi
