@@ -71,38 +71,39 @@ class Dengetv54Manager:
         return "\n".join(m3u_content)
 
     def ana_m3u_guncelle(self, yeni_icerik):
-    if not os.path.exists(self.ana_m3u_dosyasi):
-        print(f"⚠️ Dosya yok, yeni oluşturuluyor: {self.ana_m3u_dosyasi}")
-        with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as f:
-            f.write("#EXTM3U\n") 
+        if not os.path.exists(self.ana_m3u_dosyasi):
+            print(f"⚠️ Dosya yok, yeni oluşturuluyor: {self.ana_m3u_dosyasi}")
+            with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as f:
+                f.write("#EXTM3U\n")
 
-    with open(self.ana_m3u_dosyasi, "r", encoding='utf-8') as dosya:
-        ana_icerik = dosya.read()
+        with open(self.ana_m3u_dosyasi, "r", encoding='utf-8') as dosya:
+            ana_icerik = dosya.read()
 
-    lines = ana_icerik.split("\n")
-    filtered_lines = []
-    skip = False
-    for line in lines:
-        if line.startswith("#EXTINF") and 'group-title="Dengetv54"' in line:
-            skip = True
-            continue
-        if skip and line and not line.startswith("#EXTINF"):
-            continue
+        lines = ana_icerik.split("\n")
+        filtered_lines = []
         skip = False
-        filtered_lines.append(line)
+        for line in lines:
+            if line.startswith("#EXTINF") and 'group-title="Dengetv54"' in line:
+                skip = True
+                continue
+            if skip and line and not line.startswith("#EXTINF"):
+                continue
+            skip = False
+            filtered_lines.append(line)
 
-    yeni_dosya_icerik = "\n".join(filtered_lines) + "\n\n" + yeni_icerik
-    with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as dosya:
-        dosya.write(yeni_dosya_icerik)
+        yeni_dosya_icerik = "\n".join(filtered_lines) + "\n\n" + yeni_icerik
+        with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as dosya:
+            dosya.write(yeni_dosya_icerik)
 
     def calistir(self):
         self.referer_url = self.find_working_domain()
         if not self.referer_url:
             return
-        
+
         m3u8_icerik = self.build_m3u8_content()
         self.ana_m3u_guncelle(m3u8_icerik)
         print("✅ Dengetv54 kanalları başarıyla eklendi.")
+
 
 if __name__ == "__main__":
     manager = Dengetv54Manager("osibusidenge.m3u")
