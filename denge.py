@@ -70,7 +70,7 @@ class Dengetv54Manager:
             m3u_content.append(f"{self.base_stream_url}{file_name}")
         return "\n".join(m3u_content)
 
-   def ana_m3u_guncelle(self, yeni_icerik):
+    def ana_m3u_guncelle(self, yeni_icerik):
     if not os.path.exists(self.ana_m3u_dosyasi):
         print(f"⚠️ Dosya yok, yeni oluşturuluyor: {self.ana_m3u_dosyasi}")
         with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as f:
