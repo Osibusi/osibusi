@@ -20,7 +20,8 @@ jobs:
       - name: Bağımlılıkları Kur
         run: |
           pip install requests httpx
-
+          pip install gitpython
+          
       - name: OSIBUSI Script Çalıştır
         run: |
           python neon.py
