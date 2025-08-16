@@ -103,7 +103,7 @@ class Dengetv54Manager:
         print("✅ Dengetv54 kanalları başarıyla eklendi.")
 
 if __name__ == "__main__":
-    manager = Dengetv54Manager("/storage/emulated/0/umitm0d.m3u")
+    manager = Dengetv54Manager("OsibusidengeXYZ.m3u")
     manager.calistir()
 
 
