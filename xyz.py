@@ -68,4 +68,4 @@ class XYZsportsManager:
             f.write(m3u_icerik)
 
 if __name__ == "__main__":
-    XYZsportsManager("Osibusi.m3u").calistir()
+    XYZsportsManager("OsibusiXYZ.m3u").calistir()
