@@ -1,4 +1,4 @@
-name: Osibusi denge XYZ IPTV Otomatik
+gename: Osibusi denge XYZ IPTV Otomatik
 
 on:
   schedule:
@@ -23,7 +23,7 @@ jobs:
 
       - name: OSIBUSI Script Çalıştır
         run: |
-          python xyz.py
+          python dengexyz.py
 
       - name: Playlist'i Commit Et
         run: |
