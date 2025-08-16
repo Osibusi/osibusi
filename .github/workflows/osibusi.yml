@@ -25,17 +25,10 @@ jobs:
         run: |
           python osibusi.py
 
-     - name: Playlist'i Commit Et
-  run: |
-    if [ -f "OSIBUSITRGOALSS.m3u" ]; then
-      git config --global user.name "github-actions[bot]"
-      git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      git pull --rebase origin main
-
-      git add OSIBUSITRGOALSS.m3u
-      git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-      git push
-    else
-      echo "Playlist dosyası bulunamadı, commit atlanıyor."
-    fi
+      - name: Playlist'i Commit Et
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add OSIBUSITRGOALSS.m3u
+          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
+          git push
