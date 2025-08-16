@@ -1,5 +1,5 @@
 name: Osibusi denge XYZ IPTV Otomatik
-import re
+
 on:
   schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
@@ -24,7 +24,7 @@ jobs:
       - name: OSIBUSI Script Çalıştır
         run: |
           python dengexyz.py
-
+import re
    - name: Playlist'i Commit Et
   run: |
     git config --global user.name "github-actions[bot]"
