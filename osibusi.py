@@ -99,7 +99,7 @@ def generate_m3u(base_url, referer, user_agent):
 
 # ========= ASIL ÇALIŞMA =========
 if __name__ == "__main__":
-    DOSYA_ADI = "OSIBUSITRGOALSS.m3u"
+    DOSYA_ADI = "M3U/OSIBUSITRGOALSS.m3u"
     user_agent = "Mozilla/5.0"
 
     print(f"{CYAN}{BOLD}╔══════════════════════════════════════╗")
