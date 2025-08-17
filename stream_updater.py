@@ -150,3 +150,4 @@ def main():
     updater.update_streams()
 
 if __name__ == "__main__":
+    main()
