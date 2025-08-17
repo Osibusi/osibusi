@@ -1,5 +1,5 @@
 # Bu kod sarapcanagii ve primatzeka'ya aittir. İstediğiniz gibi kullanabilirsiniz.
-name: Update Stream URLs
+name: NEON Update Stream URLs
 
 on:
   schedule:
