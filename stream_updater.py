@@ -17,7 +17,7 @@ class StreamUpdater:
         })
         
         self.repo_path = os.getenv('GITHUB_WORKSPACE')
-        self.m3u8_path = os.path.join(self.repo_path, 'NeonSpor/NeonSpor.m3u8')
+        self.m3u8_path = os.path.join(self.repo_path, 'M3U/Osispor.m3u8')
 
     def extract_domain_from_script(self, script_content):
         try:
