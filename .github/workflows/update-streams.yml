@@ -31,6 +31,6 @@ jobs:
           git config --global user.email "action@github.com"
 
       - name: Run updater script
-        run: python stream_updater.py
+        run: python neon.py
         env:
           MY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
