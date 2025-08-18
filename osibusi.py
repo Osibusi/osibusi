@@ -76,11 +76,10 @@ def get_final_url(url):
 def find_baseurl(url):
     try:
         r = requests.get(url, timeout=10)
-        m3u8_match = re.search(r'(https?://[^\s\'"]+\.m3u8)', r.text)
-        if m3u8_match:
-            full_url = m3u8_match.group(1)
-            base = full_url.rsplit('/', 1)[0] + '/'  # sadece klasörü al
-            return base
+        for pattern in [r'baseurl\s*[:=]\s*["\']([^"\']+)["\']', r'"baseurl"\s*:\s*"([^"]+)"']:
+            m = re.search(pattern, r.text)
+            if m:
+                return m.group(1)
     except:
         return None
     return None
