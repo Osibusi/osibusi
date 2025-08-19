@@ -8,7 +8,7 @@ GREEN = "\033[92m"
 YELLOW = "\033[93m"
 RESET = "\033[0m"
 
-# Kanallar listesi (başına ÜmitM0d eklenecek)
+# Kanallar listesi (başına Berat eklenecek)
 KANALLAR = [
     {"dosya": "yayinzirve.m3u8", "tvg_id": "BeinSports1.tr", "kanal_adi": "Bein Sports 1 HD (VIP)"},
     {"dosya": "yayin1.m3u8", "tvg_id": "BeinSports1.tr", "kanal_adi": "Bein Sports 1 HD"},
@@ -73,7 +73,7 @@ def find_baseurl(url):
 def generate_m3u(base_url, referer, user_agent):
     lines = ["#EXTM3U"]
     for idx, k in enumerate(KANALLAR, start=1):
-        name = f"ÜmitM0d {k['kanal_adi']}"
+        name = f"Berat {k['kanal_adi']}"
         lines.append(f'#EXTINF:-1 tvg-id="{k["tvg_id"]}" tvg-name="{name}",{name}')
         lines.append(f'#EXTVLCOPT:http-user-agent={user_agent}')
         lines.append(f'#EXTVLCOPT:http-referrer={referer}')
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     playlist = generate_m3u(base_url, site, "Mozilla/5.0")
-    with open("umitm0d.m3u", "w", encoding="utf-8") as f:
+    with open("OSIBUSITRGOALSS.m3u", "w", encoding="utf-8") as f:
         f.write(playlist)
 
-    print(f"{GREEN}[OK] Playlist oluşturuldu: umitm0d.m3u{RESET}")
+    print(f"{GREEN}[OK] Playlist oluşturuldu: OSIBUSITRGOALSS.m3u{RESET}")
