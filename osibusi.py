@@ -73,7 +73,7 @@ def find_baseurl(url):
 def generate_m3u(base_url, referer, user_agent):
     lines = ["#EXTM3U"]
     for idx, k in enumerate(KANALLAR, start=1):
-        name = f"ATKAFASI {k['kanal_adi']}"
+        name = f"Berat {k['kanal_adi']}"
         lines.append(f'#EXTINF:-1 tvg-id="{k["tvg_id"]}" tvg-name="{name}",{name}')
         lines.append(f'#EXTVLCOPT:http-user-agent={user_agent}')
         lines.append(f'#EXTVLCOPT:http-referrer={referer}')
