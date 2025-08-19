@@ -117,7 +117,7 @@ if __name__ == "__main__":
         sys.exit(1)
     print(f"{GREEN}[OK]{RESET} Kanal URL: {chan_url}")
 
-    base_url = find_baseurl(channel_url)
+    base_url = find_baseurl(chan_url)
     if not base_url:
         print(f"{RED}[HATA] Base URL bulunamadı.{RESET}")
         sys.exit(1)
