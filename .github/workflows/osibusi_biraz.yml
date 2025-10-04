@@ -2,49 +2,48 @@ name: Osibusi biraz IPTV Otomatik
 
 on:
   schedule:
-    - cron: "0 */3 * * *"
-  workflow_dispatch:
+    - cron: "0 */3 * * *" # Her 3 saatte bir
+  workflow_dispatch: # Manuel çalıştırma
 
 jobs:
   run-osibusi:
     runs-on: ubuntu-latest
-    steps:
-      - name: Repo'yu Klonla
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Python Kur
+    steps:
+      - name: 📦 Repo'yu Klonla
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python Kur
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: Bağımlılıkları Kur
+      - name: 🔧 Bağımlılıkları Kur
         run: |
+          pip install --upgrade pip
           pip install requests httpx
 
-      - name: OSIBUSI Script Çalıştır
+      - name: ▶️ OSIBUSI Script Çalıştır
         run: |
-          python biraz.py
+          echo "🚀 biraz.py çalıştırılıyor..."
+          python biraz.py || (echo "❌ Python script hata verdi!" && exit 1)
+          echo "✅ Script başarıyla tamamlandı."
 
-      - name: Değişiklikleri Git'e Ekle ve Push Et
-        shell: bash
+      - name: 💾 Değişiklikleri Git'e Ekle ve Push Et
         run: |
           echo "🔧 Git yapılandırması yapılıyor..."
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           echo "💾 Değişiklikler hazırlanıyor..."
-          git add Osibusibiraz.m3u || true
+          if [ -f Osibusibiraz.m3u ]; then
+            echo "📂 Dosya bulundu: Osibusibiraz.m3u"
+          else
+            echo "⚠️ Dosya bulunamadı, biraz.py doğru çalışmamış olabilir!"
+            ls -l
+            exit 1
+          fi
 
           echo "🧩 Pull & Rebase yapılıyor..."
           git stash || true
-          git pull --rebase origin main || true
-          git stash pop || true
-
-          echo "🪶 Commit işlemi..."
-          NOW=$(date +"%Y-%m-%d %H-%M-%S")
-          git commit -m "Otomatik güncelleme: $NOW" || echo "Değişiklik yok"
-
-          echo "🚀 Push işlemi..."
-          git push origin main || echo "Push başarısız, lütfen manuel kontrol et."
+          git pull --rebase origin main || echo "Pull başarısız
