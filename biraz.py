@@ -17,7 +17,7 @@ class XYZsportsManager:
             "androstreamlivebiraz1"
         ]
 
-    def find_working_domain(self, start=027, end=350):
+    def find_working_domain(self, start=27, end=350):
         headers = {"User-Agent": "Mozilla/5.0"}
         for i in range(start, end + 1):
             url = f"https://birazcikspor{i}.xyz/"
