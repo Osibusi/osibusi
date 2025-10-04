@@ -14,7 +14,6 @@ class OSIsportsManager:
         self.retry = retry
 
     def find_latest_domain(self):
-        """En güncel domaini bul"""
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -30,7 +29,6 @@ class OSIsportsManager:
         return fallback
 
     def fetch_channel_ids(self, domain):
-        """Playwright ile JS render sonrası tüm iframe ID’lerini al"""
         for attempt in range(1, self.retry + 1):
             print(f"🔄 Kanal çekme denemesi {attempt}/{self.retry}...")
             channel_ids = set()
@@ -41,7 +39,6 @@ class OSIsportsManager:
                     page.goto(domain, timeout=20000)
                     page.wait_for_timeout(self.wait_ms)
 
-                    # Tüm iframe elementlerini tara
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
@@ -78,8 +75,4 @@ class OSIsportsManager:
         m3u_content = self.build_m3u8_content(channel_ids)
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
-        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
-
-
-if __name__ == "__main__":
-    OSIsportsManager("M3U/Osibusibirazfull.m3u").calistir()
+        print
