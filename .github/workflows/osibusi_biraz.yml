@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Repo'yu Klonla
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Tam geçmişi indir (rebase/pull için önemli)
 
       - name: Python Kur
         uses: actions/setup-python@v5
@@ -29,7 +31,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
-          git add Osibusibiraz.m3u
-          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-          git push origin main
+
+          # Geçici değişiklikleri korumak için stash kullan
+          git
