@@ -1,13 +1,14 @@
 import os
-from playwright.sync_api import sync_playwright
-import requests
-from datetime import datetime
 import re
 import shutil
 import time
+import random
+from datetime import datetime
+from playwright.sync_api import sync_playwright
+import requests
 
 class OSIsportsManager:
-    def __init__(self, cikti_dosyasi, start_number=27, max_attempts=150, wait_ms=20000, retry=3):
+    def __init__(self, cikti_dosyasi, start_number=27, max_attempts=150, wait_ms=35000, retry=5):
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
         self.start_number = start_number
@@ -52,20 +53,21 @@ class OSIsportsManager:
                     page.goto(domain, timeout=30000)
                     page.wait_for_timeout(self.wait_ms)
 
-                    # iframe src içindeki id parametrelerini al
+                    # iframe içindeki id parametreleri
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
-                        if src and "id=" in src:
-                            cid = re.search(r"id=(androstreamlive\w+)", src)
-                            if cid:
-                                channel_ids.add(cid.group(1))
+                        if src:
+                            cid_match = re.search(r"id=(androstreamlive\w+)", src)
+                            if cid_match:
+                                channel_ids.add(cid_match.group(1))
 
-                    # script içindeki id parametrelerini tara
+                    # script içindeki id parametreleri
                     scripts = page.query_selector_all("script")
                     for script in scripts:
                         content = script.inner_html()
                         matches = re.findall(r"id=(androstreamlive\w+)", content)
+                        matches += re.findall(r"data-id=['\"](androstreamlive\w+)['\"]", content)
                         channel_ids.update(matches)
 
                     browser.close()
@@ -84,7 +86,6 @@ class OSIsportsManager:
                 return None
             return f"https://bllovdes.d4ssgk.su/o1/{afterCh}/playlist.m3u8"
         elif cid.startswith("androstreamlive"):
-            import random
             baseurl = random.choice(self.baseurls)
             return f"{baseurl}{cid}.m3u8"
         else:
@@ -111,6 +112,7 @@ class OSIsportsManager:
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
         print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+
 
 if __name__ == "__main__":
     OSIsportsManager("M3U/Osibusibirazfull.m3u").calistir()
