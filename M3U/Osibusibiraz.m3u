@@ -1,0 +1,31 @@
+#EXTM3U
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs3
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs4
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs4.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs5
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs5.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets3
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivechstream233
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivechstream234
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://bllovdes.d4ssgk.su/o1/stream234/playlist.m3u8
