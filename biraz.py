@@ -1,6 +1,6 @@
 from httpx import Client
 
-class XYZsportsManager:
+class OSIsportsManager:
     def __init__(self, cikti_dosyasi):
         self.cikti_dosyasi = cikti_dosyasi
         self.client = Client(timeout=10, verify=False)
@@ -49,7 +49,7 @@ class XYZsportsManager:
         return "\n".join(m3u)
 
     def calistir(self):
-        domain = "https://birazcikspor27.xyz/"
+        domain = "https://birazcikspor27./"
         print(f"Domain sabit olarak kullanılıyor: {domain}")
 
         # Sayfa içeriği kontrolü
@@ -69,4 +69,4 @@ class XYZsportsManager:
         print(f"M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
 
 if __name__ == "__main__":
-    XYZsportsManager("Osibusibiraz.m3u").calistir()
+    OSIsportsManager("Osibusibiraz.m3u").calistir()
