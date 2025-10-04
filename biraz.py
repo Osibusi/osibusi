@@ -81,4 +81,4 @@ class OSIsportsManager:
 
 
 if __name__ == "__main__":
-    OSIsportsMa
+    OSIsportsManager 
