@@ -2,6 +2,45 @@ name: Osibusi Full Otomatik_son
 
 on:
   schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-osibusi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repo'yu Klonla
+        uses: actions/checkout@v4
+
+      - name: Python Kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Python Bağımlılıkları Kur
+        run: |
+          pip install --upgrade pip
+          pip install requests playwright
+
+      - name: Playwright Browserları Kur
+        run: |
+          python -m playwright install chromium
+
+      - name: birazfull_final_allchannels.py Çalıştır
+        run: |
+          python birazfull_final_allchannels.py
+
+      - name: Değişiklikleri Git'e Ekle ve Push Et
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add M3U/Osibusibirazfull.m3u
+          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
+          git push origin main
+
+on:
+  schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
   workflow_dispatch: # Manuel tetikleme
 
