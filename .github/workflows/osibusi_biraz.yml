@@ -3,7 +3,7 @@ name: Osibusi biraz IPTV Otomatik
 on:
   schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch: # Manuel çalıştırma
+  workflow_dispatch:
 
 jobs:
   run-osibusi:
@@ -12,7 +12,7 @@ jobs:
       - name: Repo'yu Klonla
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Tam geçmişi indir (rebase/pull için önemli)
+          fetch-depth: 0
 
       - name: Python Kur
         uses: actions/setup-python@v5
@@ -28,9 +28,19 @@ jobs:
           python biraz.py
 
       - name: Değişiklikleri Git'e Ekle ve Push Et
+        shell: bash
         run: |
+          echo "🔧 Git yapılandırması yapılıyor..."
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Geçici değişiklikleri korumak için stash kullan
-          git
+          echo "💾 Değişiklikler hazırlanıyor..."
+          git add Osibusibiraz.m3u || true
+
+          echo "🧩 Pull & Rebase yapılıyor..."
+          git stash || true
+          git pull --rebase origin main || true
+          git stash pop || true
+
+          echo "🪶 Commit işlemi..."
+          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-
