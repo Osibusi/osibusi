@@ -1,14 +1,14 @@
-name: Osibusi Full 7/24 Otomatik
+name: Osibusi Full CI Otomatik (Tüm Kanallar)
 
 on:
   schedule:
     - cron: "0 */3 * * *"  # Her 3 saatte bir
-  workflow_dispatch: # Manuel tetikleme
+  workflow_dispatch:
 
 jobs:
   run-osibusi:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Script 15 dk'dan uzun sürerse abort
+    timeout-minutes: 15
 
     steps:
       # 1️⃣ Repo'yu klonla
@@ -22,7 +22,7 @@ jobs:
           python-version: "3.x"
 
       # 3️⃣ Playwright ve bağımlılıkları kur
-      - name: Playwright ve Bağımlılıkları Kur
+      - name: Playwright ve Python Bağımlılıkları Kur
         run: |
           python -m pip install --upgrade pip
           python -m pip install requests playwright
