@@ -2,7 +2,7 @@ name: Osibusi biraz IPTV Otomatik
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # Her 3 saatte bir
+    - cron: "0 */3 * * *"
   workflow_dispatch:
 
 jobs:
@@ -43,8 +43,8 @@ jobs:
           git stash pop || true
 
           echo "🪶 Commit işlemi..."
-          COMMIT_MESSAGE="Otomatik güncelleme: $(date "+%Y-%m-%d %H:%M:%S")"
-          git commit -m "$COMMIT_MESSAGE" || echo "Değişiklik yok"
+          NOW=$(date +"%Y-%m-%d %H-%M-%S")
+          git commit -m "Otomatik güncelleme: $NOW" || echo "Değişiklik yok"
 
           echo "🚀 Push işlemi..."
           git push origin main || echo "Push başarısız, lütfen manuel kontrol et."
