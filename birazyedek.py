@@ -1,41 +1,66 @@
-from httpx import Client
+from playwright.sync_api import sync_playwright
 import os
 from datetime import datetime
 
-class OSIsportsManager:
-    def __init__(self, cikti_dosyasi):
-        os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
-        self.cikti_dosyasi = cikti_dosyasi
-        self.channel_ids = [
-            "androstreamlivebiraz1",
-            "androstreamlivebs1",
-            "androstreamlivebs2",
-            "androstreamlivebs3",
-        ]
-        self.baseurls = [
+M3U_DOSYA = "M3U/Osibusibirazfull.m3u"
+os.makedirs(os.path.dirname(M3U_DOSYA), exist_ok=True)
+
+def main():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        
+        # Domain sayısı dinamik, en günceli bulmak için 27-150 arası deneyebiliriz
+        latest_domain = None
+        for i in range(27, 151):
+            domain = f"https://birazcikspor{i}.xyz/"
+            try:
+                page.goto(domain, timeout=10000)
+                if page.status == 200:
+                    latest_domain = domain
+                    print(f"✅ Geçerli domain bulundu: {domain}")
+                    break
+            except:
+                continue
+        
+        if not latest_domain:
+            print("⚠️ Geçerli domain bulunamadı.")
+            return
+        
+        page.goto(latest_domain)
+        page.wait_for_timeout(3000)  # JS’nin çalışması için bekle
+
+        # ID'leri çek
+        frame_ids = page.eval_on_selector_all(
+            "iframe",
+            "elements => elements.map(e => new URL(e.src).searchParams.get('id')).filter(id => id)"
+        )
+
+        # M3U içerik oluştur
+        m3u_lines = ["#EXTM3U"]
+        baseurls = [
             "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
+            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
         ]
-        self.client = Client(timeout=10, verify=False)
-
-    def resolve_source_from_id(self, cid):
         import random
-        baseurl = random.choice(self.baseurls)
-        return f"{baseurl}{cid}.m3u8"
 
-    def build_m3u8_content(self):
-        m3u = ["#EXTM3U"]
-        for cid in self.channel_ids:
-            url = self.resolve_source_from_id(cid)
-            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
-            m3u.append(url)
-        m3u.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        return "\n".join(m3u)
+        for cid in frame_ids:
+            if cid.startswith("androstreamlivechstream"):
+                after = cid.replace("androstreamlivechstream", "")
+                stream_url = f"https://bllovdes.d4ssgk.su/o1/{after}/playlist.m3u8"
+            else:
+                baseurl = random.choice(baseurls)
+                stream_url = f"{baseurl}{cid}.m3u8"
+            m3u_lines.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
+            m3u_lines.append(stream_url)
 
-    def calistir(self):
-        m3u_icerik = self.build_m3u8_content()
-        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
-            f.write(m3u_icerik)
-        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+        m3u_lines.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        
+        with open(M3U_DOSYA, "w", encoding="utf-8") as f:
+            f.write("\n".join(m3u_lines))
+        
+        print(f"✅ M3U dosyası '{M3U_DOSYA}' başarıyla oluşturuldu.")
+        browser.close()
 
 if __name__ == "__main__":
-    OSIsportsManager("M3U/Osibusi_birazyedek.m3u").calistir()
+    main()
