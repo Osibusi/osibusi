@@ -1,9 +1,9 @@
-name: Osibusi Full All Channels Otomatik
+name: Osibusi Full Otomatik
 
 on:
   schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch:
+  workflow_dispatch: # Manuel tetikleme
 
 jobs:
   run-osibusi:
@@ -20,11 +20,11 @@ jobs:
         with:
           python-version: "3.x"
 
-      # 3️⃣ Playwright ve bağımlılıkları kur
-      - name: Playwright ve Bağımlılıkları Kur
+      # 3️⃣ Bağımlılıkları kur
+      - name: Python Bağımlılıkları Kur
         run: |
           pip install --upgrade pip
-          pip install requests playwright
+          pip install playwright requests
           playwright install chromium
 
       # 4️⃣ Script'i çalıştır
