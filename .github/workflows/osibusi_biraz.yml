@@ -2,8 +2,8 @@ name: Osibusi biraz IPTV Otomatik
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch: # Manuel çalıştırma
+    - cron: "0 */3 * * *" # Her 3 saatte bir otomatik çalışır
+  workflow_dispatch: # Manuel çalıştırma seçeneği
 
 jobs:
   run-osibusi:
@@ -20,6 +20,7 @@ jobs:
 
       - name: 🔧 Bağımlılıkları Kur
         run: |
+          echo "📦 Bağımlılıklar kuruluyor..."
           pip install --upgrade pip
           pip install requests httpx
 
@@ -28,6 +29,8 @@ jobs:
           echo "🚀 biraz.py çalıştırılıyor..."
           python biraz.py || (echo "❌ Python script hata verdi!" && exit 1)
           echo "✅ Script başarıyla tamamlandı."
+          echo "📁 Çıktı dosyaları:"
+          ls -lh *.m3u || true
 
       - name: 💾 Değişiklikleri Git'e Ekle ve Push Et
         run: |
@@ -35,15 +38,4 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          echo "💾 Değişiklikler hazırlanıyor..."
-          if [ -f Osibusibiraz.m3u ]; then
-            echo "📂 Dosya bulundu: Osibusibiraz.m3u"
-          else
-            echo "⚠️ Dosya bulunamadı, biraz.py doğru çalışmamış olabilir!"
-            ls -l
-            exit 1
-          fi
-
-          echo "🧩 Pull & Rebase yapılıyor..."
-          git stash || true
-          git pull --rebase origin main || echo "Pull başarısız
+          echo "💾 Değişiklikler hazırl
