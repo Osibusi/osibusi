@@ -3,9 +3,10 @@ from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeo
 import requests
 from datetime import datetime
 import time
+import re
 
 class OSIsportsManager:
-    def __init__(self, cikti_dosyasi, start_number=27, max_attempts=150, wait_ms=15000, retry=3):
+    def __init__(self, cikti_dosyasi, start_number=27, max_attempts=150, wait_ms=25000, retry=3):
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
         self.start_number = start_number
@@ -14,6 +15,7 @@ class OSIsportsManager:
         self.retry = retry
 
     def find_latest_domain(self):
+        """En güncel domaini bul"""
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -29,6 +31,7 @@ class OSIsportsManager:
         return fallback
 
     def fetch_channel_ids(self, domain):
+        """JS render sonrası tüm iframe ve script id’lerini al"""
         for attempt in range(1, self.retry + 1):
             print(f"🔄 Kanal çekme denemesi {attempt}/{self.retry}...")
             channel_ids = set()
@@ -36,15 +39,23 @@ class OSIsportsManager:
                 with sync_playwright() as p:
                     browser = p.chromium.launch(headless=True)
                     page = browser.new_page()
-                    page.goto(domain, timeout=20000)
-                    page.wait_for_timeout(self.wait_ms)
+                    page.goto(domain, timeout=30000)  # 30 saniye
+                    page.wait_for_timeout(self.wait_ms)  # 25 saniye bekle
 
+                    # iframe'leri tara
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
                         if src and "id=" in src:
                             cid = src.split("id=")[1]
                             channel_ids.add(cid)
+
+                    # script taglerindeki id= kontrolü
+                    scripts = page.query_selector_all("script")
+                    for script in scripts:
+                        content = script.inner_html()
+                        matches = re.findall(r"id=(androstreamlive\w+)", content)
+                        channel_ids.update(matches)
 
                     browser.close()
                     if channel_ids:
@@ -75,4 +86,8 @@ class OSIsportsManager:
         m3u_content = self.build_m3u8_content(channel_ids)
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
-        print
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+
+
+if __name__ == "__main__":
+    OSIsportsManager("M3U/Osibusibirazfull.m3u").calistir()
