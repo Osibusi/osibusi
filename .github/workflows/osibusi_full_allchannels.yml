@@ -1,14 +1,13 @@
-name: Osibusi Full CI Otomatik (Tüm Kanallar)
+name: Osibusi Full Otomatik_son
 
 on:
   schedule:
-    - cron: "0 */3 * * *"  # Her 3 saatte bir
-  workflow_dispatch:
+    - cron: "0 */3 * * *" # Her 3 saatte bir
+  workflow_dispatch: # Manuel tetikleme
 
 jobs:
   run-osibusi:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
       # 1️⃣ Repo'yu klonla
@@ -21,18 +20,23 @@ jobs:
         with:
           python-version: "3.x"
 
-      # 3️⃣ Playwright ve bağımlılıkları kur
-      - name: Playwright ve Python Bağımlılıkları Kur
+      # 3️⃣ Bağımlılıkları kur
+      - name: Python Bağımlılıkları Kur
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install requests playwright
-          playwright install chromium
+          pip install --upgrade pip
+          pip install requests playwright
 
-      # 4️⃣ Script'i çalıştır
+      # 4️⃣ Playwright browserları yükle
+      - name: Playwright Browserları Kur
+        run: |
+          python -m playwright install chromium
+
+      # 5️⃣ Script'i çalıştır
       - name: birazfull_final_allchannels.py Çalıştır
-        run: python birazfull_final_allchannels.py
+        run: |
+          python birazfull_final_allchannels.py
 
-      # 5️⃣ Değişiklikleri git'e ekle ve push et
+      # 6️⃣ Değişiklikleri git'e ekle ve push et
       - name: Değişiklikleri Git'e Ekle ve Push Et
         run: |
           git config --global user.name "github-actions[bot]"
