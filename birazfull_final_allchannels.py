@@ -3,21 +3,18 @@ from bs4 import BeautifulSoup
 import os
 import datetime
 import random
+from httpx import Client
 
 OUTPUT_FILE = "M3U/Osibusibirazfull.m3u"
 MAX_DOMAIN_CHECK = 200  # Denenecek domain sayısı
-
-# M3U klasörü yoksa oluştur
-os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-
-# Kanal URL template’leri
 BASEURLS = [
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
 ]
 
+os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+
 def find_latest_domain(start_number=27):
-    from httpx import Client
     client = Client(timeout=10, verify=False)
     for i in range(MAX_DOMAIN_CHECK):
         number = start_number + i
@@ -48,7 +45,7 @@ def extract_channel_ids(domain):
         if src and "id=" in src:
             cid = src.split("id=")[1].split("&")[0]
             channel_ids.append(cid)
-    return list(set(channel_ids))  # Tekrarları kaldır
+    return list(set(channel_ids))
 
 def resolve_source(cid):
     if cid.startswith("androstreamlivechstream"):
@@ -70,11 +67,8 @@ def build_m3u_file(channel_ids, domain):
         lines.append("#EXTVLCOPT:http-user-agent=Mozilla/5.0")
         lines.append(url)
 
-    # En güncel domaini de ekle
     lines.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
     lines.append(domain)
-
-    # Tarih damgası
     lines.append(f"# Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     return "\n".join(lines)
 
@@ -82,12 +76,12 @@ def main():
     domain = find_latest_domain()
     channel_ids = extract_channel_ids(domain)
     print(f"✅ {len(channel_ids)} kanal bulundu.")
-    # Mevcut dosyayı yedekle
+
     if os.path.exists(OUTPUT_FILE):
         bak_name = OUTPUT_FILE + "." + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".bak"
         os.rename(OUTPUT_FILE, bak_name)
         print(f"💾 Mevcut M3U dosyası yedeklendi: {bak_name}")
-    # M3U oluştur
+
     content = build_m3u_file(channel_ids, domain)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(content)
