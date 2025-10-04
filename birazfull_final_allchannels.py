@@ -70,4 +70,16 @@ class OSIsportsManager:
         m3u.append(f'# Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
-    de
+    def calistir(self):
+        print("🚀 M3U dosyası oluşturuluyor...")
+        domain = self.find_latest_domain()
+        channel_ids = self.fetch_channel_ids(domain)
+        print(f"✅ {len(channel_ids)} kanal bulundu.")
+        m3u_content = self.build_m3u8_content(channel_ids)
+        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
+            f.write(m3u_content)
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+
+
+if __name__ == "__main__":
+    OSIsportsManager("M3U/Osibusibirazfull.m3u").calistir()
