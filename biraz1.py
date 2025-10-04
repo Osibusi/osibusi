@@ -86,4 +86,4 @@ class OSIsportsManager:
 
 
 if __name__ == "__main__":
-    OSIsportsManager("M3U/Osibusibiraz.m3u").calistir()
+    OSIsportsManager("M3U/Osibusibiraz1.m3u").calistir()
