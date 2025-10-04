@@ -15,10 +15,10 @@ class XYZsportsManager:
             "androstreamlivebiraz1"
         ]
 
-    def find_working_domain(self, start=27, end=60):
+    def find_working_domain(self, start=25, end=360):
         headers = {"User-Agent": "Mozilla/5.0"}
         for i in range(start, end + 1):
-            url = f"https://birazcikspor{i}.xyz/"
+            url = f"https://birazcikspor{i}.xyz/event.html?id=androstreamlivebiraz1"
             try:
                 print(f"🕵️‍♂️ Deneniyor: {url}")
                 r = self.httpx.get(url, headers=headers)
