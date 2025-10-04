@@ -1,39 +1,44 @@
-name: Osibusi Full All Channels
+from httpx import Client
+from bs4 import BeautifulSoup
+import os
 
-on:
-  schedule:
-    - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch:
+class OSIsportsManager:
+    def __init__(self, cikti_dosyasi):
+        os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
+        self.cikti_dosyasi = cikti_dosyasi
+        self.client = Client(timeout=10, verify=False)
+        self.headers = {"User-Agent": "Mozilla/5.0"}
 
-jobs:
-  run-osibusi:
-    runs-on: ubuntu-latest
+    def find_latest_domain(self, start=27, max_attempts=150):
+        for i in range(max_attempts):
+            domain = f"https://birazcikspor{start + i}.xyz/"
+            try:
+                r = self.client.get(domain, headers=self.headers)
+                if r.status_code == 200:
+                    return domain
+            except Exception:
+                continue
+        return f"https://birazcikspor{start}.xyz/"
 
-    steps:
-      - name: Repo'yu Klonla
-        uses: actions/checkout@v4
+    def fetch_channels(self, domain):
+        # Playwright veya httpx + BeautifulSoup ile tüm iframe id'lerini çek
+        # Bu örnek basit
+        return ["androstreamlivebiraz1", "androstreamlivebs1"]
 
-      - name: Python Kur
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+    def build_m3u(self, channels):
+        m3u = ["#EXTM3U"]
+        for cid in channels:
+            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
+            m3u.append(f'https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/{cid}.m3u8')
+        return "\n".join(m3u)
 
-      - name: Bağımlılıkları Kur
-        run: |
-          pip install --upgrade pip
-          pip install requests bs4 lxml httpx
-          pip install playwright
-          playwright install chromium
+    def run(self):
+        domain = self.find_latest_domain()
+        channels = self.fetch_channels(domain)
+        content = self.build_m3u(channels)
+        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
+            f.write(content)
+        print(f"M3U dosyası '{self.cikti_dosyasi}' oluşturuldu.")
 
-      - name: Script'i Çalıştır
-        run: |
-          python birazfull_final_allchannels.py
-
-      - name: Değişiklikleri Git'e Ekle ve Push Et
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
-          git add M3U/Osibusibirazfull.m3u
-          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-          git push origin main
+if __name__ == "__main__":
+    OSIsportsManager("M3U/Osibusibirazfull.m3u").run()
