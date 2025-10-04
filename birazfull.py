@@ -62,4 +62,4 @@ class OSIsportsManager:
         print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
 
 if __name__ == "__main__":
-    OSIsportsManager("M3U/Osibusibiraz.m3u").calistir()
+    OSIsportsManager("M3U/Osibusibirazfull.m3u").calistir()
