@@ -12,6 +12,11 @@ class XYZsportsManager:
             "androstreamlivebs1",
             "androstreamlivebs2",
             "androstreamlivebs3",
+            "androstreamlivebs4",
+            "androstreamlivebs5",
+            "androstreamlivets1",
+            "androstreamlivets2",
+            "androstreamlivets3",
             "androstreamlivechstream233",
             "androstreamlivechstream234",
             # İstersen burada diğer kanal ID’lerini ekleyebilirsin
