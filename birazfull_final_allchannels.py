@@ -1,91 +1,97 @@
 from playwright.sync_api import sync_playwright
+from bs4 import BeautifulSoup
 import os
-import re
-from datetime import datetime
+import datetime
 import random
 
 OUTPUT_FILE = "M3U/Osibusibirazfull.m3u"
-BASE_URLS = [
+MAX_DOMAIN_CHECK = 200  # Denenecek domain sayısı
+
+# M3U klasörü yoksa oluştur
+os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+
+# Kanal URL template’leri
+BASEURLS = [
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
 ]
 
-# Klasör ve yedekleme
-os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-if os.path.exists(OUTPUT_FILE):
-    bak_name = f"{OUTPUT_FILE}.{datetime.now().strftime('%Y%m%d_%H%M%S')}.bak"
-    os.rename(OUTPUT_FILE, bak_name)
-    print(f"💾 Mevcut M3U dosyası yedeklendi: {bak_name}")
-
-def resolve_source_from_id(cid):
-    if cid.startswith("androstreamlivechstream"):
-        after = cid.replace("androstreamlivechstream", "")
-        return f"https://bllovdes.d4ssgk.su/o1/{after}/playlist.m3u8"
-    elif cid.startswith("androstreamlive"):
-        baseurl = random.choice(BASE_URLS)
-        return f"{baseurl}{cid}.m3u8"
-    return None
-
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page()
-    
-    # Dinamik domain tespiti
-    start_number = 27
-    max_attempts = 100
-    for i in range(max_attempts):
-        domain_number = start_number + i
-        domain = f"https://birazcikspor{domain_number}.xyz/"
+def find_latest_domain(start_number=27):
+    from httpx import Client
+    client = Client(timeout=10, verify=False)
+    for i in range(MAX_DOMAIN_CHECK):
+        number = start_number + i
+        domain = f"https://birazcikspor{number}.xyz/"
         try:
-            page.goto(domain, timeout=15000)
-            page.wait_for_timeout(5000)  # JS render için bekle
-            if page.title():
+            r = client.get(domain)
+            if r.status_code == 200:
                 print(f"✅ Geçerli domain bulundu: {domain}")
-                break
+                return domain
         except:
             continue
+    fallback = f"https://birazcikspor{start_number}.xyz/"
+    print(f"⚠️ Domain bulunamadı, varsayılan kullanılıyor: {fallback}")
+    return fallback
+
+def extract_channel_ids(domain):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(domain, timeout=15000)
+        html = page.content()
+        browser.close()
+
+    soup = BeautifulSoup(html, "lxml")
+    channel_ids = []
+    for iframe in soup.find_all("iframe", id="matchPlayer"):
+        src = iframe.get("src")
+        if src and "id=" in src:
+            cid = src.split("id=")[1].split("&")[0]
+            channel_ids.append(cid)
+    return list(set(channel_ids))  # Tekrarları kaldır
+
+def resolve_source(cid):
+    if cid.startswith("androstreamlivechstream"):
+        after = cid.replace("androstreamlivechstream", "")
+        return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
+    elif cid.startswith("androstreamlive"):
+        baseurl = random.choice(BASEURLS)
+        return f"{baseurl}{cid}.m3u8"
     else:
-        domain = f"https://birazcikspor{start_number}.xyz/"
-        print(f"⚠️ Güncel domain bulunamadı, varsayılan kullanılıyor: {domain}")
-        page.goto(domain)
-        page.wait_for_timeout(5000)
-    
-    # iframe ve script tarama
-    ids = set()
+        return None
 
-    frames = page.query_selector_all("iframe")
-    for f in frames:
-        src = f.get_attribute("src") or ""
-        match = re.search(r"id=(androstreamlive[\w\d]+)", src)
-        if match:
-            ids.add(match.group(1))
+def build_m3u_file(channel_ids, domain):
+    lines = ["#EXTM3U"]
+    for cid in channel_ids:
+        url = resolve_source(cid)
+        if not url:
+            continue
+        lines.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
+        lines.append("#EXTVLCOPT:http-user-agent=Mozilla/5.0")
+        lines.append(url)
 
-    scripts = page.query_selector_all("script")
-    for s in scripts:
-        text = s.text_content() or ""
-        matches = re.findall(r"id=(androstreamlive[\w\d]+)", text)
-        for m in matches:
-            ids.add(m)
+    # En güncel domaini de ekle
+    lines.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
+    lines.append(domain)
 
-    browser.close()
+    # Tarih damgası
+    lines.append(f"# Generated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    return "\n".join(lines)
 
-print(f"✅ {len(ids)} kanal bulundu.")
+def main():
+    domain = find_latest_domain()
+    channel_ids = extract_channel_ids(domain)
+    print(f"✅ {len(channel_ids)} kanal bulundu.")
+    # Mevcut dosyayı yedekle
+    if os.path.exists(OUTPUT_FILE):
+        bak_name = OUTPUT_FILE + "." + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".bak"
+        os.rename(OUTPUT_FILE, bak_name)
+        print(f"💾 Mevcut M3U dosyası yedeklendi: {bak_name}")
+    # M3U oluştur
+    content = build_m3u_file(channel_ids, domain)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ M3U dosyası '{OUTPUT_FILE}' başarıyla oluşturuldu.")
 
-# M3U içeriği oluştur
-m3u_lines = ["#EXTM3U"]
-for cid in sorted(ids):
-    stream_url = resolve_source_from_id(cid)
-    if not stream_url:
-        continue
-    channel_name = cid.replace("-", " ").title()
-    m3u_lines.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
-    m3u_lines.append("#EXTVLCOPT:http-user-agent=Mozilla/5.0")
-    m3u_lines.append(stream_url)
-
-# Tarih damgası ekle
-m3u_lines.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-    f.write("\n".join(m3u_lines))
-
-print(f"✅ M3U dosyası '{OUTPUT_FILE}' başarıyla oluşturuldu.")
+if __name__ == "__main__":
+    main()
