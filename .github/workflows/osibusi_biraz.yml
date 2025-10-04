@@ -43,4 +43,8 @@ jobs:
           git stash pop || true
 
           echo "🪶 Commit işlemi..."
-          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-
+          COMMIT_MESSAGE="Otomatik güncelleme: $(date "+%Y-%m-%d %H:%M:%S")"
+          git commit -m "$COMMIT_MESSAGE" || echo "Değişiklik yok"
+
+          echo "🚀 Push işlemi..."
+          git push origin main || echo "Push başarısız, lütfen manuel kontrol et."
