@@ -1,34 +1,33 @@
-import httpx
+import requests
 import random
 
 class XYZsportsManager:
     def __init__(self, cikti_dosyasi):
         self.cikti_dosyasi = cikti_dosyasi
-        self.client = httpx.Client(timeout=10, verify=False)
         self.channel_ids = [
             "androstreamlivebs1",
             "androstreamlivebs2",
             "androstreamlivechstream233",
             "androstreamlivechstream234"
-            # Kanal listesini ihtiyaç halinde buraya ekle
         ]
         self.baseurls = [
             "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
             "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
         ]
+        self.headers = {"User-Agent": "Mozilla/5.0"}
 
     def find_working_domain(self, start=1, end=500):
-        headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(start, end+1):
+        for i in range(start, end + 1):
             url = f"https://birazcikspor{i}.xyz/"
             print(f"Deniyor: {url}")
             try:
-                r = self.client.get(url, headers=headers)
+                r = requests.get(url, headers=self.headers, timeout=10)
                 if r.status_code == 200 and "clappr.min.js" in r.text:
                     print(f"Çalışan domain bulundu: {url}")
                     return url
-            except Exception as e:
+            except requests.RequestException as e:
                 print(f"Hata: {e}")
+                continue
         return None
 
     def resolve_stream_url(self, id_):
