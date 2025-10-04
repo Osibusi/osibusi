@@ -1,4 +1,3 @@
-
 name: Osibusi biraz IPTV Otomatik
 
 on:
@@ -26,10 +25,11 @@ jobs:
         run: |
           python biraz.py
 
-      - name: Playlist'i Commit Et
+      - name: Değişiklikleri Git'e Ekle ve Push Et
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
           git add Osibusibiraz.m3u
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-          git push
+          git push origin main
