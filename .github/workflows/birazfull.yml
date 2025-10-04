@@ -23,13 +23,12 @@ jobs:
       # 3️⃣ Bağımlılıkları kur
       - name: Python Bağımlılıkları Kur
         run: |
-          pip install --upgrade pip
-          pip install requests bs4 lxml
+          python -m pip install --upgrade pip
+          python -m pip install requests bs4 lxml
 
       # 4️⃣ Script'i çalıştır
       - name: birazfull.py Çalıştır
-        run: |
-          python birazfull.py
+        run: python birazfull.py
 
       # 5️⃣ Değişiklikleri git'e ekle ve push et
       - name: Değişiklikleri Git'e Ekle ve Push Et
