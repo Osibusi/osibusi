@@ -10,7 +10,6 @@ class OSIsportsManager:
         self.max_attempts = max_attempts
 
     def find_latest_domain(self):
-        """En güncel 'birazciksporXX.xyz' domainini bul"""
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -26,7 +25,6 @@ class OSIsportsManager:
         return fallback
 
     def fetch_channel_ids(self, domain):
-        """Sayfadaki iframe ID’lerini çek"""
         try:
             r = requests.get(domain, timeout=10)
             r.raise_for_status()
@@ -47,7 +45,6 @@ class OSIsportsManager:
     def build_m3u8_content(self, channel_ids):
         m3u = ["#EXTM3U"]
         baseurl = "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
-
         for cid in channel_ids:
             stream_url = f"{baseurl}{cid}.m3u8"
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
@@ -56,4 +53,9 @@ class OSIsportsManager:
 
     def calistir(self):
         print("🚀 M3U dosyası oluşturuluyor...")
-        domain = self.find_latest_domain(
+        domain = self.find_latest_domain()
+        channel_ids = self.fetch_channel_ids(domain)
+        if not channel_ids:
+            print("⚠️ Kanal bulunamadı, M3U dosyası boş olacak!")
+        m3u_content = self.build_m3u8_content(channel_ids)
+        with
