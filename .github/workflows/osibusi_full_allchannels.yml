@@ -32,7 +32,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Remote branch'teki güncel değişiklikleri al
+          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
+          # M3U dosyasını ekle ve commit yap
           git add M3U/Osibusibirazfull.m3u
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
+          # Push işlemi
           git push origin main
