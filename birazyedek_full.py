@@ -1,66 +1,73 @@
-from playwright.sync_api import sync_playwright
 import os
 from datetime import datetime
+from playwright.sync_api import sync_playwright
 
-M3U_DOSYA = "M3U/Osibusibirazfull.m3u"
-os.makedirs(os.path.dirname(M3U_DOSYA), exist_ok=True)
+OUTPUT_FILE = "M3U/Osibusibirazfull.m3u"
 
-def main():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        
-        # Domain sayısı dinamik, en günceli bulmak için 27-150 arası deneyebiliriz
-        latest_domain = None
-        for i in range(27, 151):
-            domain = f"https://birazcikspor{i}.xyz/"
+class OSIsportsManager:
+    def __init__(self, output_file):
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        self.output_file = output_file
+
+    def get_latest_domain(self, start=27, max_attempts=100):
+        from httpx import Client
+        client = Client(timeout=10, verify=False)
+        for i in range(max_attempts):
+            number = start + i
+            domain = f"https://birazcikspor{number}.xyz/"
             try:
-                page.goto(domain, timeout=10000)
-                if page.status == 200:
-                    latest_domain = domain
+                r = client.get(domain)
+                if r.status_code == 200:
                     print(f"✅ Geçerli domain bulundu: {domain}")
-                    break
-            except:
+                    return domain
+            except Exception:
                 continue
-        
-        if not latest_domain:
-            print("⚠️ Geçerli domain bulunamadı.")
-            return
-        
-        page.goto(latest_domain)
-        page.wait_for_timeout(3000)  # JS’nin çalışması için bekle
+        fallback = f"https://birazcikspor{start}.xyz/"
+        print(f"⚠️ Domain bulunamadı, varsayılan: {fallback}")
+        return fallback
 
-        # ID'leri çek
-        frame_ids = page.eval_on_selector_all(
-            "iframe",
-            "elements => elements.map(e => new URL(e.src).searchParams.get('id')).filter(id => id)"
-        )
+    def fetch_channels(self, domain):
+        channels = []
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto(domain, timeout=15000)
+            page.wait_for_timeout(3000)  # sayfanın yüklenmesi için bekle
+            frames = page.frames
+            for frame in frames:
+                src = frame.url
+                if "androstreamlive" in src and src.endswith(".m3u8"):
+                    channels.append(src)
+            browser.close()
+        return list(set(channels))  # benzersiz kanallar
 
-        # M3U içerik oluştur
-        m3u_lines = ["#EXTM3U"]
-        baseurls = [
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
-        ]
-        import random
+    def build_m3u(self, channels):
+        lines = ["#EXTM3U"]
+        for url in channels:
+            # kanal adını url'den al
+            name = url.split("/")[-1].replace(".m3u8", "")
+            lines.append(f'#EXTINF:-1 group-title="Birazcikspor", {name}')
+            lines.append(url)
+        lines.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        return "\n".join(lines)
 
-        for cid in frame_ids:
-            if cid.startswith("androstreamlivechstream"):
-                after = cid.replace("androstreamlivechstream", "")
-                stream_url = f"https://bllovdes.d4ssgk.su/o1/{after}/playlist.m3u8"
-            else:
-                baseurl = random.choice(baseurls)
-                stream_url = f"{baseurl}{cid}.m3u8"
-            m3u_lines.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
-            m3u_lines.append(stream_url)
+    def run(self):
+        print("🚀 M3U dosyası oluşturuluyor...")
+        domain = self.get_latest_domain()
+        channels = self.fetch_channels(domain)
+        print(f"✅ {len(channels)} kanal bulundu.")
+        m3u_content = self.build_m3u(channels)
 
-        m3u_lines.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        
-        with open(M3U_DOSYA, "w", encoding="utf-8") as f:
-            f.write("\n".join(m3u_lines))
-        
-        print(f"✅ M3U dosyası '{M3U_DOSYA}' başarıyla oluşturuldu.")
-        browser.close()
+        # Mevcut dosyayı yedekle
+        if os.path.exists(self.output_file):
+            bak_name = self.output_file + "." + datetime.now().strftime("%Y%m%d_%H%M%S") + ".bak"
+            os.rename(self.output_file, bak_name)
+            print(f"💾 Mevcut M3U yedeklendi: {bak_name}")
+
+        with open(self.output_file, "w", encoding="utf-8") as f:
+            f.write(m3u_content)
+        print(f"✅ M3U dosyası '{self.output_file}' başarıyla oluşturuldu.")
+
 
 if __name__ == "__main__":
-    main()
+    OSIsportsManager(OUTPUT_FILE).run()
