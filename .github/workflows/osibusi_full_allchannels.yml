@@ -1,42 +1,38 @@
-name: Osibusi Full Otomatik
+name: Osibusi Full All Channels
 
 on:
   schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch: # Manuel tetikleme
+  workflow_dispatch:
 
 jobs:
   run-osibusi:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Repo'yu klonla
       - name: Repo'yu Klonla
         uses: actions/checkout@v4
 
-      # 2️⃣ Python kur
       - name: Python Kur
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      # 3️⃣ Bağımlılıkları kur
-      - name: Python Bağımlılıkları Kur
+      - name: Bağımlılıkları Kur
         run: |
           pip install --upgrade pip
           pip install playwright requests
           playwright install chromium
 
-      # 4️⃣ Script'i çalıştır
-      - name: birazfull_final_allchannels.py Çalıştır
+      - name: Script'i Çalıştır
         run: |
           python birazfull_final_allchannels.py
 
-      # 5️⃣ Değişiklikleri git'e ekle ve push et
       - name: Değişiklikleri Git'e Ekle ve Push Et
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add M3U/Osibusibirazfull.m3u
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
+          git pull --rebase origin main || echo "Pull başarısız, devam ediliyor."
           git push origin main
