@@ -4,6 +4,7 @@ import requests
 from datetime import datetime
 import time
 import re
+import shutil
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi, start_number=27, max_attempts=150, wait_ms=25000, retry=3):
@@ -14,8 +15,14 @@ class OSIsportsManager:
         self.wait_ms = wait_ms
         self.retry = retry
 
+    def backup_existing_m3u(self):
+        if os.path.exists(self.cikti_dosyasi):
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            backup_file = f"{self.cikti_dosyasi}.{timestamp}.bak"
+            shutil.copy2(self.cikti_dosyasi, backup_file)
+            print(f"💾 Mevcut M3U dosyası yedeklendi: {backup_file}")
+
     def find_latest_domain(self):
-        """En güncel domaini bul"""
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -31,7 +38,6 @@ class OSIsportsManager:
         return fallback
 
     def fetch_channel_ids(self, domain):
-        """JS render sonrası tüm iframe ve script id’lerini al"""
         for attempt in range(1, self.retry + 1):
             print(f"🔄 Kanal çekme denemesi {attempt}/{self.retry}...")
             channel_ids = set()
@@ -39,10 +45,9 @@ class OSIsportsManager:
                 with sync_playwright() as p:
                     browser = p.chromium.launch(headless=True)
                     page = browser.new_page()
-                    page.goto(domain, timeout=30000)  # 30 saniye
-                    page.wait_for_timeout(self.wait_ms)  # 25 saniye bekle
+                    page.goto(domain, timeout=30000)
+                    page.wait_for_timeout(self.wait_ms)
 
-                    # iframe'leri tara
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
@@ -50,7 +55,6 @@ class OSIsportsManager:
                             cid = src.split("id=")[1]
                             channel_ids.add(cid)
 
-                    # script taglerindeki id= kontrolü
                     scripts = page.query_selector_all("script")
                     for script in scripts:
                         content = script.inner_html()
@@ -68,7 +72,7 @@ class OSIsportsManager:
         print("⚠️ Kanal ID’leri alınamadı!")
         return []
 
-    def build_m3u8_content(self, channel_ids):
+    def build_m3u8_content(self, channel_ids, domain):
         m3u = ["#EXTM3U"]
         baseurl = "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
         for cid in channel_ids:
@@ -76,14 +80,16 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {cid}')
             m3u.append(stream_url)
         m3u.append(f'# Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+        m3u.append(f'# Source Domain: {domain}')
         return "\n".join(m3u)
 
     def calistir(self):
         print("🚀 M3U dosyası oluşturuluyor...")
+        self.backup_existing_m3u()
         domain = self.find_latest_domain()
         channel_ids = self.fetch_channel_ids(domain)
         print(f"✅ {len(channel_ids)} kanal bulundu.")
-        m3u_content = self.build_m3u8_content(channel_ids)
+        m3u_content = self.build_m3u8_content(channel_ids, domain)
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
         print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
