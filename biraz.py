@@ -1,7 +1,5 @@
 from httpx import Client
 import re
-import os
-from urllib.parse import urlparse
 
 class XYZsportsManager:
     def __init__(self, cikti_dosyasi):
@@ -17,13 +15,15 @@ class XYZsportsManager:
             "androstreamlivebiraz1"
         ]
 
-    def find_working_domain(self, start=27, end=350):
+    def find_working_domain(self, start=27, end=60):
         headers = {"User-Agent": "Mozilla/5.0"}
         for i in range(start, end + 1):
             url = f"https://birazcikspor{i}.xyz/"
             try:
+                print(f"🕵️‍♂️ Deneniyor: {url}")
                 r = self.httpx.get(url, headers=headers)
                 if r.status_code == 200 and "uxsyplayer" in r.text:
+                    print(f"✅ Çalışan domain bulundu: {url}")
                     return r.text, url
             except:
                 continue
@@ -41,7 +41,7 @@ class XYZsportsManager:
         m3u = ["#EXTM3U"]
         for cid in self.channel_ids:
             channel_name = cid.replace("-", " ").title()
-            m3u.append(f'#EXTINF:-1 group-title="Berat ",{channel_name}')
+            m3u.append(f'#EXTINF:-1 group-title="Berat", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(f'#EXTVLCOPT:http-referrer={referer_url}')
             m3u.append(f'{base_stream_url}{cid}/playlist.m3u8')
@@ -50,23 +50,26 @@ class XYZsportsManager:
     def calistir(self):
         html, referer_url = self.find_working_domain()
         if not html:
-            raise RuntimeError("Çalışan domain bulunamadı!")
+            raise RuntimeError("❌ Çalışan domain bulunamadı!")
+
         player_domain = self.find_dynamic_player_domain(html)
         if not player_domain:
-            raise RuntimeError("Player domain bulunamadı!")
+            raise RuntimeError("❌ Player domain bulunamadı!")
 
         r = self.httpx.get(f"{player_domain}/index.php?id={self.channel_ids[0]}", headers={
             "User-Agent": "Mozilla/5.0",
             "Referer": referer_url
         })
+
         base_url = self.extract_base_stream_url(r.text)
         if not base_url:
-            raise RuntimeError("Base stream URL bulunamadı!")
+            raise RuntimeError("❌ Base stream URL bulunamadı!")
 
         m3u_icerik = self.build_m3u8_content(base_url, referer_url)
 
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_icerik)
+        print(f"✅ M3U dosyası oluşturuldu: {self.cikti_dosyasi}")
 
 if __name__ == "__main__":
     XYZsportsManager("Osibusibiraz.m3u").calistir()
