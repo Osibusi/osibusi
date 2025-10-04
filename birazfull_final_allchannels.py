@@ -14,7 +14,6 @@ class OSIsportsManager:
         self.retry = retry
 
     def find_latest_domain(self):
-        """En güncel domaini bul"""
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -30,7 +29,6 @@ class OSIsportsManager:
         return fallback
 
     def fetch_channel_ids(self, domain):
-        """Playwright ile JS render sonrası tüm iframe ID’lerini al"""
         for attempt in range(1, self.retry + 1):
             print(f"🔄 Kanal çekme denemesi {attempt}/{self.retry}...")
             channel_ids = set()
@@ -39,9 +37,8 @@ class OSIsportsManager:
                     browser = p.chromium.launch(headless=True)
                     page = browser.new_page()
                     page.goto(domain, timeout=20000)
-                    page.wait_for_timeout(self.wait_ms)  # JS yüklemesi için bekle
+                    page.wait_for_timeout(self.wait_ms)
 
-                    # Tüm iframe elementlerini tara
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
@@ -56,7 +53,7 @@ class OSIsportsManager:
                 print("⚠️ Timeout oluştu, tekrar denenecek...")
             except Exception as e:
                 print(f"⚠️ Playwright hatası: {e}")
-            time.sleep(2)  # kısa bekleme ile retry
+            time.sleep(2)
         print("⚠️ Kanal ID’leri alınamadı!")
         return []
 
