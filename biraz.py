@@ -2,9 +2,10 @@ from httpx import Client
 from datetime import datetime
 import random
 import time
+import os
 
 class OSIsportsManager:
-    def __init__(self, cikti_dosyasi):
+    def __init__(self, cikti_dosyasi="Osibusibiraz.m3u"):
         self.cikti_dosyasi = cikti_dosyasi
         self.client = Client(timeout=10, verify=False)
         self.baseurls = [
@@ -22,14 +23,11 @@ class OSIsportsManager:
             "androstreamlivets3",
             "androstreamlivechstream233",
             "androstreamlivechstream234",
-            # Yeni kanal ID’lerini buraya ekleyebilirsin
         ]
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
     def resolve_source_from_id(self, cid):
-        # Her çalıştırmada küçük farklar için random seed ekle
         random.seed(time.time())
-
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream", "")
             if not after:
@@ -38,8 +36,7 @@ class OSIsportsManager:
         elif cid.startswith("androstreamlive"):
             baseurl = random.choice(self.baseurls)
             return f"{baseurl}{cid}.m3u8"
-        else:
-            return None
+        return None
 
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
@@ -65,11 +62,23 @@ class OSIsportsManager:
                 raise RuntimeError("Beklenen içerik domain sayfasında bulunamadı.")
         except Exception as e:
             print(f"⚠️ Domain erişiminde hata: {e}")
-            # Domain çalışmasa bile M3U üretmeye devam et
-            pass
+            print("❗ Domain erişimi başarısız olsa bile M3U dosyası üretilecek...")
 
-        # M3U içeriği oluşturuluyor
+        # M3U içeriği oluştur
         m3u_icerik = self.build_m3u8_content()
 
-        # 🔁 Dosyanın her çalışmada farklı görünmesi için tarih etiketi ekle
-        m3u_icerik += f"\n#_
+        # Güncelleme tarihi etiketi ekle
+        tarih_satiri = "# Güncellendi: " + datetime.now().isoformat()
+        m3u_icerik = m3u_icerik + "\n" + tarih_satiri + "\n"
+
+        # 📁 Dosya yoksa otomatik oluştur
+        os.makedirs(os.path.dirname(self.cikti_dosyasi) or ".", exist_ok=True)
+
+        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
+            f.write(m3u_icerik)
+
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu ve güncellendi.")
+
+
+if __name__ == "__main__":
+    OSIsportsMa
