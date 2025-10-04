@@ -5,17 +5,13 @@ from datetime import datetime
 import random
 
 OUTPUT_FILE = "M3U/Osibusibirazfull.m3u"
-
-# Base URL’ler
 BASE_URLS = [
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
     "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
 ]
 
-# Eğer M3U klasörü yoksa oluştur
+# Klasör ve yedekleme
 os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-
-# Mevcut dosyayı yedekle
 if os.path.exists(OUTPUT_FILE):
     bak_name = f"{OUTPUT_FILE}.{datetime.now().strftime('%Y%m%d_%H%M%S')}.bak"
     os.rename(OUTPUT_FILE, bak_name)
@@ -41,8 +37,9 @@ with sync_playwright() as p:
         domain_number = start_number + i
         domain = f"https://birazcikspor{domain_number}.xyz/"
         try:
-            page.goto(domain, timeout=10000)
-            if page.title():  # Sayfa açıldıysa
+            page.goto(domain, timeout=15000)
+            page.wait_for_timeout(5000)  # JS render için bekle
+            if page.title():
                 print(f"✅ Geçerli domain bulundu: {domain}")
                 break
         except:
@@ -51,24 +48,25 @@ with sync_playwright() as p:
         domain = f"https://birazcikspor{start_number}.xyz/"
         print(f"⚠️ Güncel domain bulunamadı, varsayılan kullanılıyor: {domain}")
         page.goto(domain)
+        page.wait_for_timeout(5000)
     
-    # iframe’lerdeki id’leri al
-    frames = page.query_selector_all("iframe")
+    # iframe ve script tarama
     ids = set()
+
+    frames = page.query_selector_all("iframe")
     for f in frames:
         src = f.get_attribute("src") or ""
         match = re.search(r"id=(androstreamlive[\w\d]+)", src)
         if match:
             ids.add(match.group(1))
 
-    # Script tag’lerinde gömülü id’leri al
     scripts = page.query_selector_all("script")
     for s in scripts:
         text = s.text_content() or ""
         matches = re.findall(r"id=(androstreamlive[\w\d]+)", text)
         for m in matches:
             ids.add(m)
-    
+
     browser.close()
 
 print(f"✅ {len(ids)} kanal bulundu.")
@@ -87,7 +85,6 @@ for cid in sorted(ids):
 # Tarih damgası ekle
 m3u_lines.append(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-# Dosyaya yaz
 with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
     f.write("\n".join(m3u_lines))
 
