@@ -48,22 +48,31 @@ class OSIsportsManager:
                     page.goto(domain, timeout=30000)
                     page.wait_for_timeout(self.wait_ms)
 
+                    # Tüm iframe'lerden kanal ID çek
                     iframes = page.query_selector_all("iframe")
                     for iframe in iframes:
                         src = iframe.get_attribute("src")
                         if src and "id=" in src:
-                            cid = src.split("id=")[1]
+                            cid = src.split("id=")[1].split("&")[0]
                             channel_ids.add(cid)
 
+                    # Script içindeki id parametrelerini de tara
                     scripts = page.query_selector_all("script")
                     for script in scripts:
                         content = script.inner_html()
                         matches = re.findall(r"id=(androstreamlive\w+)", content)
                         channel_ids.update(matches)
 
+                    # Dinamik olarak eklenen kanalları da kontrol et (data-id gibi)
+                    divs = page.query_selector_all("[data-id]")
+                    for div in divs:
+                        data_id = div.get_attribute("data-id")
+                        if data_id and data_id.startswith("androstreamlive"):
+                            channel_ids.add(data_id)
+
                     browser.close()
                     if channel_ids:
-                        return list(channel_ids)
+                        return sorted(channel_ids)
             except PlaywrightTimeoutError:
                 print("⚠️ Timeout oluştu, tekrar denenecek...")
             except Exception as e:
