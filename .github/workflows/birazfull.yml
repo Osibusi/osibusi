@@ -1,9 +1,9 @@
-name: Osibusi Full Otomatik
+name: Osibusi biraz Full Otomatik
 
 on:
   schedule:
     - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch: # Manuel tetikleme
+  workflow_dispatch:
 
 jobs:
   run-osibusi:
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.x"
 
-      # 3️⃣ Bağımlılıkları kur
+      # 3️⃣ Python bağımlılıklarını kur
       - name: Python Bağımlılıkları Kur
         run: |
           python -m pip install --upgrade pip
