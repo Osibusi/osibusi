@@ -120,4 +120,14 @@ class OSIsportsManager:
             subprocess.run(["git", "commit", "-m", commit_msg], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
             print("✅ Git commit ve push işlemi tamamlandı.")
-        except
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ Git işlemlerinde hata: {e}")
+
+    def run(self):
+        print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
+        self.write_m3u_file()
+        self.git_commit_and_push()
+
+if __name__ == "__main__":
+    manager = OSIsportsManager()
+    manager.run()
