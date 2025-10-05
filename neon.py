@@ -3,10 +3,12 @@ import logging
 import os
 import re
 from git import Repo
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ------------------- Ayarlar -------------------
 START_DOMAIN = 523
 DOMAIN_COUNT = 300
+MAX_THREADS = 20
 REPO_PATH = os.getenv('GITHUB_WORKSPACE', os.getcwd())
 M3U8_PATH = os.path.join(REPO_PATH, 'M3U/Osispor.m3u8')
 # ------------------------------------------------
@@ -18,6 +20,9 @@ session.headers.update({
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Referer': 'https://monotv523.com/'
 })
+
+# Global flag: ilk aktif domain bulundu mu
+active_domain_found = False
 
 def extract_baseurl_from_script(script_content):
     try:
@@ -39,23 +44,27 @@ def extract_baseurl_from_script(script_content):
         logging.warning(f"Baseurl alınamadı: {e}")
         return None
 
-def find_first_active_domain():
-    for domain_number in range(START_DOMAIN, START_DOMAIN + DOMAIN_COUNT):
-        url = f"https://monotv{domain_number}.com/channel?id=yayinzirve"
-        logging.info(f"Domain {domain_number} kontrol ediliyor...")
-        try:
-            response = session.get(url, timeout=3)
-            if response.status_code == 200:
-                scripts = re.findall(r"<script.*?>(.*?)</script>", response.text, re.DOTALL)
-                for script in scripts:
-                    baseurl = extract_baseurl_from_script(script)
-                    if baseurl:
-                        logging.info(f"İlk aktif domain bulundu {domain_number}: {baseurl}")
-                        return baseurl
-        except requests.RequestException:
-            logging.warning(f"Domain {domain_number} yanıt vermedi, atlandı.")
-    logging.info("Hiçbir aktif domain bulunamadı.")
-    return None
+def check_domain(domain_number):
+    global active_domain_found
+    if active_domain_found:  # Eğer zaten bulunduysa atla
+        return None
+
+    url = f"https://monotv{domain_number}.com/channel?id=yayinzirve"
+    logging.info(f"Domain {domain_number} kontrol ediliyor...")
+    try:
+        response = session.get(url, timeout=3)
+        if response.status_code == 200:
+            scripts = re.findall(r"<script.*?>(.*?)</script>", response.text, re.DOTALL)
+            for script in scripts:
+                baseurl = extract_baseurl_from_script(script)
+                if baseurl:
+                    logging.info(f"İlk aktif domain bulundu {domain_number}: {baseurl}")
+                    active_domain_found = True  # Diğerleri atlanacak
+                    return baseurl
+        return None
+    except requests.RequestException:
+        logging.warning(f"Domain {domain_number} yanıt vermedi, atlandı.")
+        return None
 
 def read_m3u8():
     try:
@@ -86,13 +95,23 @@ def main():
     if not current_content:
         return
 
-    new_baseurl = find_first_active_domain()
+    new_baseurl = None
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        futures = {executor.submit(check_domain, i): i for i in range(START_DOMAIN, START_DOMAIN + DOMAIN_COUNT)}
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                if result:
+                    new_baseurl = result
+                    break  # İlk aktif domain bulundu, diğerlerini dikkate alma
+            except Exception as e:
+                logging.warning(f"Domain kontrol hatası: {e}")
+
     if not new_baseurl:
         logging.info("Aktif domain bulunamadığı için güncelleme yapılmadı.")
         return
 
     updated_content = update_m3u8(current_content, new_baseurl)
-
     if updated_content != current_content:
         try:
             with open(M3U8_PATH, 'w', encoding='utf-8') as f:
