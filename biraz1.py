@@ -68,8 +68,8 @@ class OSIsportsManager:
             "androstreamlivetb3": "Tabi 3",
             "androstreamlivetb4": "Tabi 4",
             "androstreamlivetb5": "Tabi 5",
-            "androstreamlivess1": "Sports 1"
-            "androstreamlivess2": "Sports 2"
+            "androstreamlivess1": "Sports 1",
+            "androstreamlivess2": "Sports 2",
             "androstreamlivefb": "® Fenerbahçe Live",
             "androstreamlivetrt1": "TRT 1",
             "androstreamlivetv8": "Tv 8",
