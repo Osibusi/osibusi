@@ -1,51 +1,37 @@
-name: Osibusi SELÇUK IPTV Otomatik
+name: Update Selcuk M3U
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # Her 3 saatte bir
-  workflow_dispatch:
+    # Her 3 saatte bir çalışacak (cron formatı: dakika saat gün ay haftanın_günü)
+    - cron: '0 */3 * * *'
+  workflow_dispatch:  # Manuel başlatmak için
 
 jobs:
-  run-osibusi:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 📦 Repo'yu Klonla
-        uses: actions/checkout@v4
+      - name: Repo klonla
+        uses: actions/checkout@v3
 
-      - name: 🐍 Python Kur
-        uses: actions/setup-python@v5
+      - name: Python kur
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: '3.13'
 
-      - name: 📦 Bağımlılıkları Kur
+      - name: Bağımlılıkları yükle
         run: |
-          pip install --upgrade pip
-          pip install requests httpx
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 httpx
 
-      - name: ▶️ OSIBUSI Script Çalıştır
+      - name: M3U scriptini çalıştır
         run: |
-          echo '🚀 selcuk_m3u.py çalıştırılıyor...'
           python selcuk_m3u.py
-          echo '✅ Script tamamlandı.'
-          ls -R M3U || echo '⚠️ M3U klasörü boş olabilir.'
 
-      - name: 💾 Değişiklikleri Git'e Ekle ve Push Et
-        shell: bash
+      - name: M3U dosyalarını Git ile commit et ve push
         run: |
-          echo '🔧 Git yapılandırması yapılıyor...'
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          echo '💾 Tüm M3U dosyaları ekleniyor...'
-          git add M3U/*.m3u || echo '⚠️ M3U klasörü boş olabilir.'
-
-          echo '🧩 Pull & Rebase yapılıyor...'
-          git stash || true
-          git pull --rebase origin main || echo 'Pull başarısız, devam ediliyor.'
-          git stash pop || true
-
-          echo '🪶 Commit işlemi...'
-          git commit -m 'Otomatik M3U güncellemesi: '"$(date '+%Y-%m-%d %H:%M:%S')" || echo 'ℹ️ Değişiklik yok'
-
-          echo '🚀 Push işlemi...'
-          git push origin main || echo '⚠️ Push sırasında hata olabilir, kontrol et.'
+          git config --global user.email "you@example.com"
+          git config --global user.name "GitHub Actions"
+          git add M3U/*.m3u
+          git commit -m "Update Selcuk M3U: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
+          git push origin main || echo "Push başarısız oldu, belki değişiklik yoktu."
