@@ -14,7 +14,7 @@ class OSIsportsManager:
         self.max_attempts = max_attempts
 
         self.channel_ids = [
-            "androstreamlivebs1":"BeinSpor 1","androstreamlivebs2":"BeinSpor 2","androstreamlivebs3":"BeinSpor 3",
+            "androstreamlivebs1": "BeinSpor 1","androstreamlivebs2": "BeinSpor 2","androstreamlivebs3": "BeinSpor 3",
             "androstreamlivebs4","androstreamlivebs5","androstreamlivets1",
             "androstreamlivets2","androstreamlivets3","androstreamlivesm1",
             "androstreamlivesm2","androstreamlivees1","androstreamlivees2",
