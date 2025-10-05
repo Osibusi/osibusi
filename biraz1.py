@@ -1,9 +1,9 @@
 from httpx import Client
 import os
+import random
 
 class OSIsportsManager:
-    def __init__(self, cikti_dosyasi, start_number=27, max_attempts=100):
-        # Eğer M3U klasörü yoksa oluştur
+    def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=200):
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
         self.client = Client(timeout=10, verify=False)
@@ -38,9 +38,6 @@ class OSIsportsManager:
         self.max_attempts = max_attempts
 
     def find_latest_domain(self):
-        """
-        https://birazciksporXX.xyz/ URL'sindeki en güncel XX sayısını bulur
-        """
         for i in range(self.max_attempts):
             number = self.start_number + i
             domain = f"https://birazcikspor{number}.xyz/"
@@ -62,7 +59,6 @@ class OSIsportsManager:
                 return None
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
         elif cid.startswith("androstreamlive"):
-            import random
             baseurl = random.choice(self.baseurls)
             return f"{baseurl}{cid}.m3u8"
         else:
@@ -70,6 +66,7 @@ class OSIsportsManager:
 
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
+        latest_domain = self.find_latest_domain()
         for cid in self.channel_ids:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
@@ -77,11 +74,10 @@ class OSIsportsManager:
             channel_name = cid.replace("-", " ").title()
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
+            # Eğer baseurl kullanılıyorsa güncel domain ile değiştir
+            for base in self.baseurls:
+                stream_url = stream_url.replace(base, latest_domain)
             m3u.append(stream_url)
-        # En güncel domaini başa ekleyelim
-        latest_domain = self.find_latest_domain()
-        m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
-        m3u.append(latest_domain)
         return "\n".join(m3u)
 
     def calistir(self):
@@ -93,4 +89,4 @@ class OSIsportsManager:
 
 
 if __name__ == "__main__":
-    OSIsportsManager("M3U/Osibusibiraz1.m3u").calistir()
+    OSIsportsManager().calistir()
