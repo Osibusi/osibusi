@@ -1,12 +1,10 @@
 import os
 import time
-import random
 from httpx import Client
-import subprocess
+import random
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
-        # Çalışma dizini + tam yol
         self.cikti_dosyasi = os.path.join(os.getcwd(), cikti_dosyasi)
         os.makedirs(os.path.dirname(self.cikti_dosyasi), exist_ok=True)
 
@@ -53,19 +51,25 @@ class OSIsportsManager:
             "androstreamlivechstream234":"Channel 234"
         }
 
-        # Rastgele base URL’ler
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
 
-        self.headers = {"User-Agent": "Mozilla/5.0"}
-
-    # Rastgele domain
+    # En güncel domaini bul
     def find_latest_domain(self):
-        latest = f"https://birazcikspor{random.randint(self.start_number, self.start_number + self.max_attempts)}.xyz/"
-        print(f"✅ Güncel domain seçildi: {latest}")
-        return latest
+        for i in range(self.start_number, self.start_number + self.max_attempts):
+            domain = f"https://birazcikspor{i}.xyz/"
+            try:
+                r = self.client.head(domain, timeout=5)
+                if r.status_code == 200:
+                    print(f"✅ Geçerli domain bulundu: {domain}")
+                    return domain
+            except Exception:
+                continue
+        fallback = f"https://birazcikspor{self.start_number}.xyz/"
+        print(f"⚠️ Geçerli domain bulunamadı, varsayılan: {fallback}")
+        return fallback
 
     # Kanal URL çözümü
     def resolve_source_from_id(self, cid):
@@ -89,39 +93,23 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # Güncel domain ve timestamp + random ID ile içerik değişikliği garanti
+        # Güncel domain ve timestamp ekle
         m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
         m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
-        m3u.append(f'# RandomID: {random.randint(100000,999999)}')
         return "\n".join(m3u)
 
-    # Dosyayı güvenle yaz
+    # Dosyayı her çalıştırmada üzerine yaz
     def write_m3u_file(self):
         print(f"⚠️ Dosya üzerine yazılıyor: {self.cikti_dosyasi}")
         m3u_content = self.build_m3u8_content()
-        try:
-            with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
-                f.write(m3u_content)
-            print(f"✅ M3U dosyası oluşturuldu/güncellendi.")
-        except Exception as e:
-            print(f"❌ Dosya yazılamadı: {e}")
-
-    # Git commit & push (her durumda commit)
-    def git_commit_and_push(self):
-        try:
-            subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
-            commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
-            subprocess.run(["git", "commit", "-m", commit_msg, "--allow-empty"], check=True)
-            subprocess.run(["git", "push", "origin", "main"], check=True)
-            print("✅ Git commit ve push tamamlandı.")
-        except subprocess.CalledProcessError as e:
-            print(f"⚠️ Git hatası: {e}")
+        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
+            f.write(m3u_content)
+        print(f"✅ M3U dosyası oluşturuldu/güncellendi.")
 
     def run(self):
         print("🚀 M3U dosyası oluşturuluyor...")
         self.write_m3u_file()
-        self.git_commit_and_push()
 
 if __name__ == "__main__":
     manager = OSIsportsManager()
