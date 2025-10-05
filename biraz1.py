@@ -145,7 +145,7 @@ class OSIsportsManager:
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
         if latest_domain:
-            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
+            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor_OSI", Güncel Domain')
             m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
