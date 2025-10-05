@@ -57,7 +57,7 @@ class OSIsportsManager:
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
 
-        # Git için kullanıcı bilgisi
+        # Git kullanıcı bilgisi
         subprocess.run(["git", "config", "--global", "user.email", "you@example.com"])
         subprocess.run(["git", "config", "--global", "user.name", "Your Name"])
 
@@ -95,10 +95,10 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # Güncel domain ve değişen timestamp
+        # Güncel domain ve Unix timestamp (her çalıştırmada değişir)
         m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
         m3u.append(latest_domain)
-        m3u.append(f'# Generated: {time.time()}')  # Unix timestamp, her zaman değişir
+        m3u.append(f'# Generated: {time.time()}')  # Unix timestamp
         return "\n".join(m3u)
 
     def write_m3u_file(self):
@@ -112,7 +112,6 @@ class OSIsportsManager:
         try:
             subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
             commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
-            # --allow-empty sayesinde içerik değişmese bile commit yapılır
             subprocess.run(["git", "commit", "-m", commit_msg, "--allow-empty"], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
             print("✅ Git commit ve push tamamlandı.")
