@@ -1,8 +1,8 @@
-name: NEON Update Streams
+name: Update Streams
 
 on:
   schedule:
-    # Her gün saat 00:00 çalıştırır
+    # Her gün saat 00:00 UTC çalıştırır
     - cron: '0 0 * * *'
   workflow_dispatch:  # Manuel tetikleme
     inputs:
@@ -26,10 +26,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install aiohttp gitpython
+          pip install requests aiohttp gitpython
 
       - name: Run neon.py
         run: python neon.py
 
-      - name: Verify push
+      - name: Finish
         run: echo "Stream update workflow completed"
