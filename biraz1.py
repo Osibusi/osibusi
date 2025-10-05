@@ -40,7 +40,7 @@ class OSIsportsManager:
             "androstreamlivechstream234"
         ]
 
-        # Kanallara özel isim atamak için dictionary
+        # Kanallara özel isimler
         self.channel_names = {
             "androstreamlivebs1": "Beşiktaş Live 1",
             "androstreamlivebs2": "Beşiktaş Live 2",
@@ -67,6 +67,7 @@ class OSIsportsManager:
             "androstreamlivechstream234": "Channel 234"
         }
 
+        # Rastgele base URL’ler
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
@@ -74,26 +75,19 @@ class OSIsportsManager:
 
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
+    # Her çalıştırmada rastgele domain üret
     def find_latest_domain(self):
-        for i in range(self.start_number, self.start_number + self.max_attempts):
-            domain = f"https://birazcikspor{i}.xyz/"
-            try:
-                r = self.client.head(domain, headers=self.headers, timeout=5)
-                if r.status_code == 200:
-                    print(f"✅ Geçerli domain bulundu: {domain}")
-                    return domain
-            except Exception:
-                continue
-        print("⚠️ Geçerli domain bulunamadı.")
-        return None
+        latest = f"https://birazcikspor{random.randint(self.start_number, self.start_number + self.max_attempts)}.xyz/"
+        print(f"✅ Güncel domain seçildi: {latest}")
+        return latest
 
     def resolve_source_from_id(self, cid):
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream", "")
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
         elif cid.startswith("androstreamlive"):
-            index = self.channel_ids.index(cid) % len(self.baseurls)
-            return f"{self.baseurls[index]}{cid}.m3u8"
+            baseurl = random.choice(self.baseurls)  # her kanal için rastgele baseurl
+            return f"{baseurl}{cid}.m3u8"
         return None
 
     def build_m3u8_content(self):
@@ -107,14 +101,12 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        if latest_domain:
-            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
-            m3u.append(latest_domain)
+        m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
+        m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
     def write_m3u_file(self):
-        # Dosya her zaman yeniden yazılır
         print("⚠️ M3U dosyası yeniden oluşturuluyor/güncelleniyor...")
         m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
@@ -128,14 +120,4 @@ class OSIsportsManager:
             subprocess.run(["git", "commit", "-m", commit_msg], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
             print("✅ Git commit ve push işlemi tamamlandı.")
-        except subprocess.CalledProcessError as e:
-            print(f"⚠️ Git işlemlerinde hata: {e}")
-
-    def run(self):
-        print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
-        self.write_m3u_file()
-        self.git_commit_and_push()
-
-if __name__ == "__main__":
-    manager = OSIsportsManager()
-    manager.run()
+        except
