@@ -7,10 +7,8 @@ class OSIsportsManager:
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
         self.client = Client(timeout=10, verify=False)
-        self.baseurls = [
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
-        ]
+        self.start_number = start_number
+        self.max_attempts = max_attempts
         self.channel_ids = [
             "androstreamlivebs1",
             "androstreamlivebs2",
@@ -33,9 +31,11 @@ class OSIsportsManager:
             "androstreamlivechstream233",
             "androstreamlivechstream234",
         ]
+        self.baseurls = [
+            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
+            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
+        ]
         self.headers = {"User-Agent": "Mozilla/5.0"}
-        self.start_number = start_number
-        self.max_attempts = max_attempts
 
     def find_latest_domain(self):
         for i in range(self.max_attempts):
@@ -49,7 +49,7 @@ class OSIsportsManager:
             except Exception:
                 continue
         fallback = f"https://birazcikspor{self.start_number}.xyz/"
-        print(f"⚠️ Güncel domain bulunamadı, varsayılan kullanılıyor: {fallback}")
+        print(f"⚠️ Geçerli domain bulunamadı, varsayılan: {fallback}")
         return fallback
 
     def resolve_source_from_id(self, cid):
@@ -61,8 +61,7 @@ class OSIsportsManager:
         elif cid.startswith("androstreamlive"):
             baseurl = random.choice(self.baseurls)
             return f"{baseurl}{cid}.m3u8"
-        else:
-            return None
+        return None
 
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
@@ -74,10 +73,10 @@ class OSIsportsManager:
             channel_name = cid.replace("-", " ").title()
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
-            # Eğer baseurl kullanılıyorsa güncel domain ile değiştir
-            for base in self.baseurls:
-                stream_url = stream_url.replace(base, latest_domain)
             m3u.append(stream_url)
+        # En güncel domain
+        m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
+        m3u.append(latest_domain)
         return "\n".join(m3u)
 
     def calistir(self):
@@ -86,7 +85,6 @@ class OSIsportsManager:
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_icerik)
         print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
-
 
 if __name__ == "__main__":
     OSIsportsManager().calistir()
