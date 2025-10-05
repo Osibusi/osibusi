@@ -1,6 +1,7 @@
 from httpx import Client
 import os
 import time
+import random
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
@@ -33,9 +34,10 @@ class OSIsportsManager:
             "androstreamlivechstream234",
         ]
 
+        # Baseurl'leri rastgele değiştirerek M3U içeriğini farklılaştırıyoruz
         self.baseurls = [
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
-            "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
+            f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
+            f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
 
         self.headers = {"User-Agent": "Mozilla/5.0"}
@@ -60,7 +62,6 @@ class OSIsportsManager:
             after = cid.replace("androstreamlivechstream", "")
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
         elif cid.startswith("androstreamlive"):
-            # Baseurl listesinden sabit eşleme
             index = self.channel_ids.index(cid) % len(self.baseurls)
             return f"{self.baseurls[index]}{cid}.m3u8"
         return None
@@ -79,21 +80,21 @@ class OSIsportsManager:
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
 
-        # En güncel domaini ekle
         if latest_domain:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
             m3u.append(latest_domain)
 
-        # Zaman damgası ekle
+        # Zaman damgası içerikte kalsın, dosya adı değişmeden M3U her zaman güncel görünsün
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
     def calistir(self):
         print("🚀 M3U dosyası oluşturuluyor...")
         m3u_icerik = self.build_m3u8_content()
+        # Dosya her çalıştırmada üzerine yazılıyor
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_icerik)
-        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla güncellendi.")
 
 if __name__ == "__main__":
     OSIsportsManager().calistir()
