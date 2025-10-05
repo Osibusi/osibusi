@@ -1,7 +1,8 @@
 import os
 import time
-from httpx import Client
 import random
+import subprocess
+from httpx import Client
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
@@ -56,7 +57,10 @@ class OSIsportsManager:
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
 
-    # En güncel domaini bul
+        # Git için kullanıcı bilgisi
+        subprocess.run(["git", "config", "--global", "user.email", "you@example.com"])
+        subprocess.run(["git", "config", "--global", "user.name", "Your Name"])
+
     def find_latest_domain(self):
         for i in range(self.start_number, self.start_number + self.max_attempts):
             domain = f"https://birazcikspor{i}.xyz/"
@@ -71,7 +75,6 @@ class OSIsportsManager:
         print(f"⚠️ Geçerli domain bulunamadı, varsayılan: {fallback}")
         return fallback
 
-    # Kanal URL çözümü
     def resolve_source_from_id(self, cid):
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream","")
@@ -81,7 +84,6 @@ class OSIsportsManager:
             return f"{baseurl}{cid}.m3u8"
         return None
 
-    # M3U içeriği
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
         latest_domain = self.find_latest_domain()
@@ -93,13 +95,12 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # Güncel domain ve timestamp ekle
+        # Güncel domain ve değişen timestamp
         m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
         m3u.append(latest_domain)
-        m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
+        m3u.append(f'# Generated: {time.time()}')  # Unix timestamp, her zaman değişir
         return "\n".join(m3u)
 
-    # Dosyayı her çalıştırmada üzerine yaz
     def write_m3u_file(self):
         print(f"⚠️ Dosya üzerine yazılıyor: {self.cikti_dosyasi}")
         m3u_content = self.build_m3u8_content()
@@ -107,9 +108,21 @@ class OSIsportsManager:
             f.write(m3u_content)
         print(f"✅ M3U dosyası oluşturuldu/güncellendi.")
 
+    def git_commit_and_push(self):
+        try:
+            subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
+            commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+            # --allow-empty sayesinde içerik değişmese bile commit yapılır
+            subprocess.run(["git", "commit", "-m", commit_msg, "--allow-empty"], check=True)
+            subprocess.run(["git", "push", "origin", "main"], check=True)
+            print("✅ Git commit ve push tamamlandı.")
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ Git hatası: {e}")
+
     def run(self):
-        print("🚀 M3U dosyası oluşturuluyor...")
+        print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
         self.write_m3u_file()
+        self.git_commit_and_push()
 
 if __name__ == "__main__":
     manager = OSIsportsManager()
