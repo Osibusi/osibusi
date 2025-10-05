@@ -1,79 +1,59 @@
 import os
 import time
-import subprocess
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
-class SelcukSportsHD:
-    def __init__(self, cikti_dosyasi="m3u/SelcukSportsHD.m3u", branch="main", max_retries=3, retry_delay=5):
-        self.cikti_dosyasi = os.path.join(os.getcwd(), cikti_dosyasi)
-        os.makedirs(os.path.dirname(self.cikti_dosyasi), exist_ok=True)
-        self.base_url = "https://selcuksportshd.biz/"  # Örnek site
-        self.branch = branch
-        self.max_retries = max_retries
-        self.retry_delay = retry_delay
+M3U_PATH = os.path.join(os.getcwd(), "M3U/selcuksports.m3u")
+URL = "https://sohbetdj.xyz/selcuksports/selcuksports_elwyj.html"
 
-        # Git config (gerekiyorsa)
-        subprocess.run(["git", "config", "--global", "user.email", "you@example.com"])
-        subprocess.run(["git", "config", "--global", "user.name", "Your Name"])
+os.makedirs(os.path.dirname(M3U_PATH), exist_ok=True)
 
-    def fetch_channels(self):
-        """Kanal listesini al ve m3u formatına ekle. Retry destekli."""
-        m3u_content = ["#EXTM3U"]
-        for attempt in range(1, self.max_retries + 1):
-            try:
-                r = requests.get(self.base_url, timeout=10)
-                r.raise_for_status()
-                soup = BeautifulSoup(r.text, "html.parser")
-                links = soup.find_all("a", {"data-url": True})
+def fetch_channels():
+    """Web sayfasından tüm canlı yayın linklerini çek"""
+    try:
+        with httpx.Client(timeout=15) as client:
+            r = client.get(URL)
+            r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        items = soup.select("ul li a[data-url]")
 
-                if not links:
-                    raise ValueError("⚠️ Kanal bulunamadı. Site değişmiş olabilir.")
+        channels = []
+        for item in items:
+            name_tag = item.select_one(".name")
+            time_tag = item.select_one("time")
+            url = item['data-url']
+            name = name_tag.text.strip() if name_tag else "Unknown"
+            start_time = time_tag.text.strip() if time_tag else ""
+            channels.append((name, url, start_time))
+        return channels
+    except Exception as e:
+        print(f"⚠️ Yayınlar çekilemedi: {e}")
+        return []
 
-                for a in links:
-                    stream_url = a.get("data-url")
-                    name_tag = a.find("div", class_="name")
-                    channel_name = name_tag.text.strip() if name_tag else "Unknown"
-                    m3u_content.append(f'#EXTINF:-1 group-title="SelcukSportsHD", {channel_name}')
-                    m3u_content.append(stream_url)
-                
-                print(f"✅ Kanal listesi alındı ({len(links)} kanal).")
-                return m3u_content
+def build_m3u(channels):
+    """M3U formatını oluştur"""
+    lines = ["#EXTM3U"]
+    for name, url, start_time in channels:
+        lines.append(f'#EXTINF:-1 group-title="Selcuksports", {name} {start_time}')
+        lines.append(url)
+    return "\n".join(lines)
 
-            except Exception as e:
-                print(f"⚠️ Deneme {attempt}/{self.max_retries} başarısız: {e}")
-                if attempt < self.max_retries:
-                    print(f"⏳ {self.retry_delay} saniye sonra tekrar denenecek...")
-                    time.sleep(self.retry_delay)
-                else:
-                    print("❌ Maksimum deneme sayısına ulaşıldı. İşlem iptal edildi.")
-                    return m3u_content  # Boş olsa da dön
+def write_m3u(content):
+    with open(M3U_PATH, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ M3U dosyası güncellendi: {M3U_PATH}")
 
-    def write_m3u(self, m3u_content):
-        with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
-            f.write("\n".join(m3u_content))
-        print(f"✅ M3U dosyası oluşturuldu: {self.cikti_dosyasi}")
-
-    def git_commit_and_push(self):
-        try:
-            subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
-            commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
-            subprocess.run(["git", "commit", "-m", commit_msg, "--allow-empty"], check=True)
-            subprocess.run(["git", "push", "origin", self.branch], check=True)
-            print("✅ Git commit ve push tamamlandı.")
-        except subprocess.CalledProcessError as e:
-            print(f"⚠️ Git hatası: {e}")
-
-    def run_once(self):
-        print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
-        m3u_content = self.fetch_channels()
-        self.write_m3u(m3u_content)
-        self.git_commit_and_push()
-        print("✅ İşlem tamamlandı.")
+def main():
+    while True:
+        print("🚀 Yayınlar çekiliyor ve M3U güncelleniyor...")
+        channels = fetch_channels()
+        if channels:
+            m3u_content = build_m3u(channels)
+            write_m3u(m3u_content)
+        else:
+            print("⚠️ Yayın bulunamadı.")
+        print("⏳ 3 saat bekleniyor...")
+        time.sleep(3 * 3600)  # 3 saat
 
 if __name__ == "__main__":
-    manager = SelcukSportsHD()
-    while True:
-        manager.run_once()
-        print("⏰ 3 saat bekleniyor...")
-        time.sleep(3 * 60 * 60)  # 3 saat bekle
+    main()
