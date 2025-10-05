@@ -3,10 +3,12 @@ import logging
 import os
 import re
 from git import Repo
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ------------------- Ayarlar -------------------
 START_DOMAIN = 523
 DOMAIN_COUNT = 300
+MAX_THREADS = 20
 REPO_PATH = os.getenv('GITHUB_WORKSPACE', os.getcwd())
 M3U8_PATH = os.path.join(REPO_PATH, 'M3U/Osispor.m3u8')
 # ------------------------------------------------
@@ -20,7 +22,6 @@ session.headers.update({
 })
 
 def extract_baseurl_from_script(script_content):
-    """ Script içerisinden domain.php URL veya baseurl çıkart """
     try:
         split_pattern = r"'([^']+)'\.split\('\|'\)"
         match = re.search(split_pattern, script_content)
@@ -28,20 +29,23 @@ def extract_baseurl_from_script(script_content):
             parts = match.group(1).split('|')
             if len(parts) > 3:
                 domain_php = f"https://{parts[3]}.com/domain.php"
-                response = session.get(domain_php, timeout=5)
-                if response.status_code == 200:
-                    data = response.json()
-                    return data.get('baseurl', '').rstrip('/')
+                try:
+                    resp = session.get(domain_php, timeout=3)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        return data.get('baseurl', '').rstrip('/')
+                except requests.RequestException:
+                    logging.warning(f"domain.php {parts[3]} yanıt vermedi.")
         return None
     except Exception as e:
         logging.warning(f"Baseurl alınamadı: {e}")
         return None
 
 def check_domain(domain_number):
-    """ Belirtilen domaini kontrol et ve baseurl döndür """
     url = f"https://monotv{domain_number}.com/channel?id=yayinzirve"
+    logging.info(f"Domain {domain_number} kontrol ediliyor...")
     try:
-        response = session.get(url, timeout=5)
+        response = session.get(url, timeout=3)
         if response.status_code == 200:
             scripts = re.findall(r"<script.*?>(.*?)</script>", response.text, re.DOTALL)
             for script in scripts:
@@ -51,6 +55,7 @@ def check_domain(domain_number):
                     return baseurl
         return None
     except requests.RequestException:
+        logging.warning(f"Domain {domain_number} yanıt vermedi, atlandı.")
         return None
 
 def read_m3u8():
@@ -83,10 +88,22 @@ def main():
         return
 
     updated_content = current_content
-    for i in range(START_DOMAIN, START_DOMAIN + DOMAIN_COUNT):
-        baseurl = check_domain(i)
-        if baseurl:
-            updated_content = update_m3u8(updated_content, baseurl)
+    active_baseurls = []
+
+    # Paralel domain tarama
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        futures = {executor.submit(check_domain, i): i for i in range(START_DOMAIN, START_DOMAIN + DOMAIN_COUNT)}
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                if result:
+                    active_baseurls.append(result)
+            except Exception as e:
+                logging.warning(f"Domain kontrol hatası: {e}")
+
+    # Aktif domainlerin baseurl'leri ile M3U8 güncelle
+    for baseurl in active_baseurls:
+        updated_content = update_m3u8(updated_content, baseurl)
 
     if updated_content != current_content:
         try:
