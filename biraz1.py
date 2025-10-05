@@ -1,9 +1,9 @@
 import os
 import time
 import random
+import string
 from httpx import Client
 import subprocess
-import re
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
@@ -53,48 +53,22 @@ class OSIsportsManager:
         }
 
         self.headers = {"User-Agent": "Mozilla/5.0"}
-        self.worker_base = self.detect_worker_base()  # Otomatik güncel worker ID
 
-    def detect_worker_base(self):
-        """Sitedeki güncel worker ID’yi tespit eder"""
-        test_url = "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
-        try:
-            r = self.client.get(test_url, headers=self.headers)
-            # HTML/JS içinden örnek worker ID çekilebilir
-            match = re.search(r"https://wandering-pond-([0-9a-z]+)\.andorrmaid278\.workers\.dev", r.text)
-            if match:
-                worker_id = match.group(1)
-                print(f"✅ Güncel worker ID bulundu: {worker_id}")
-                return f"https://wandering-pond-{worker_id}.andorrmaid278.workers.dev/checklist/"
-        except Exception as e:
-            print(f"⚠️ Worker ID tespiti başarısız: {e}")
-        # fallback
-        return "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
-
-    def find_latest_domain(self):
-        for i in range(self.start_number, self.start_number + self.max_attempts):
-            domain = f"https://birazcikspor{i}.xyz/"
-            try:
-                r = self.client.head(domain, headers=self.headers, timeout=5)
-                if r.status_code == 200:
-                    print(f"✅ Geçerli domain bulundu: {domain}")
-                    return domain
-            except Exception:
-                continue
-        print("⚠️ Geçerli domain bulunamadı.")
-        return None
+    def get_random_worker(self):
+        # 4 karakterli harf + rakam kombinasyonu
+        code = ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
+        return f"https://wandering-pond-{code}.andorrmaid278.workers.dev/checklist/"
 
     def resolve_source_from_id(self, cid):
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream", "")
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
-        elif cid.startswith("androstreamlive"):
-            return f"{self.worker_base}{cid}.m3u8"
-        return None
+        else:
+            baseurl = self.get_random_worker()
+            return f"{baseurl}{cid}.m3u8"
 
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
-        latest_domain = self.find_latest_domain()
         for cid in self.channel_ids:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
@@ -103,26 +77,22 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        if latest_domain:
-            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
-            m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
     def write_m3u_file(self):
-        print(f"⚠️ Dosya üzerine yazılıyor: {self.cikti_dosyasi}")
         m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
-        print(f"✅ M3U dosyası oluşturuldu/güncellendi.")
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' oluşturuldu/güncellendi.")
 
     def git_commit_and_push(self):
         try:
             subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
             commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
-            subprocess.run(["git", "commit", "-m", commit_msg], check=True)
+            subprocess.run(["git", "commit", "--allow-empty", "-m", commit_msg], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
-            print("✅ Git commit ve push işlemi tamamlandı.")
+            print("✅ Git commit ve push tamamlandı.")
         except subprocess.CalledProcessError as e:
             print(f"⚠️ Git hatası: {e}")
 
@@ -130,7 +100,6 @@ class OSIsportsManager:
         print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
         self.write_m3u_file()
         self.git_commit_and_push()
-
 
 if __name__ == "__main__":
     manager = OSIsportsManager()
