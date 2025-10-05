@@ -6,6 +6,7 @@ import subprocess
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
+        # Dizini oluştur
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
         self.client = Client(timeout=5, verify=False)
@@ -13,29 +14,15 @@ class OSIsportsManager:
         self.max_attempts = max_attempts
 
         self.channel_ids = [
-            "androstreamlivebs1",
-            "androstreamlivebs2",
-            "androstreamlivebs3",
-            "androstreamlivebs4",
-            "androstreamlivebs5",
-            "androstreamlivets1",
-            "androstreamlivets2",
-            "androstreamlivets3",
-            "androstreamlivesm1",
-            "androstreamlivesm2",
-            "androstreamlivees1",
-            "androstreamlivees2",
-            "androstreamlivetb1",
-            "androstreamlivetb2",
-            "androstreamlivetb3",
-            "androstreamlivetb4",
-            "androstreamlivetb5",
-            "androstreamlivefb",
-            "androstreamlivechstream233",
-            "androstreamlivechstream234",
+            "androstreamlivebs1","androstreamlivebs2","androstreamlivebs3",
+            "androstreamlivebs4","androstreamlivebs5","androstreamlivets1",
+            "androstreamlivets2","androstreamlivets3","androstreamlivesm1",
+            "androstreamlivesm2","androstreamlivees1","androstreamlivees2",
+            "androstreamlivetb1","androstreamlivetb2","androstreamlivetb3",
+            "androstreamlivetb4","androstreamlivetb5","androstreamlivefb",
+            "androstreamlivechstream233","androstreamlivechstream234"
         ]
 
-        # Rastgele baseurl kullanımı ile M3U içeriğini her çalıştırmada biraz farklılaştır
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
@@ -68,7 +55,6 @@ class OSIsportsManager:
     def build_m3u8_content(self):
         m3u = ["#EXTM3U"]
         latest_domain = self.find_latest_domain()
-
         for cid in self.channel_ids:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
@@ -77,33 +63,30 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-
         if latest_domain:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
             m3u.append(latest_domain)
-
-        # Zaman damgası içerikte kalsın
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
     def write_m3u_file(self):
+        # Eğer dosya yoksa veya eski dosya silinmişse yeniden oluştur
+        if not os.path.exists(self.cikti_dosyasi):
+            print("⚠️ M3U dosyası bulunamadı, yeniden oluşturuluyor...")
         m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
-        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' oluşturuldu/güncellendi.")
 
     def git_commit_and_push(self):
         try:
-            # Git add
             subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
-            # Git commit
             commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
             subprocess.run(["git", "commit", "-m", commit_msg], check=True)
-            # Git push
             subprocess.run(["git", "push", "origin", "main"], check=True)
-            print("✅ Git commit ve push işlemi başarıyla tamamlandı.")
+            print("✅ Git commit ve push işlemi tamamlandı.")
         except subprocess.CalledProcessError as e:
-            print(f"⚠️ Git işlemlerinde hata oluştu: {e}")
+            print(f"⚠️ Git işlemlerinde hata: {e}")
 
     def run(self):
         print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
