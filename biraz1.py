@@ -53,7 +53,7 @@ class OSIsportsManager:
             "androstreamlivechstream234":"Channel 234"
         }
 
-        # Rastgele base URL’ler (her çalıştırmada farklı)
+        # Rastgele base URL’ler (her çalıştırmada farklı worker URL)
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
@@ -100,7 +100,7 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # Güncel domain ve Unix timestamp ekle
+        # Güncel domain ve timestamp ekle
         m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
         m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.time()}')  # Unix timestamp ile her zaman farklı
