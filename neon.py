@@ -1,153 +1,103 @@
-# Bu kod sarapcanagii ve primatzeka' ya aittir. İstediginiz gibi kullanabilirsiniz.
-
 import requests
-import json
 import logging
 import os
 import re
-from datetime import datetime
 from git import Repo
 
-class StreamUpdater:
-    def __init__(self):
-        self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Referer': 'https://monotv523.com/'
-        })
-        
-        self.repo_path = os.getenv('GITHUB_WORKSPACE')
-        self.m3u8_path = os.path.join(self.repo_path, 'M3U/Osispor.m3u8')
+# ------------------- Ayarlar -------------------
+START_DOMAIN = 523
+DOMAIN_COUNT = 300
+REPO_PATH = os.getenv('GITHUB_WORKSPACE', os.getcwd())
+M3U8_PATH = os.path.join(REPO_PATH, 'M3U/Osispor.m3u8')
+# ------------------------------------------------
 
-    def extract_domain_from_script(self, script_content):
-        try:
-            split_pattern = r"'([^']+)'.split\('\|'\)"
-            match = re.search(split_pattern, script_content)
-            if match:
-                split_string = match.group(1)
-                parts = split_string.split('|')
-                domain_name = parts[3]
-                domain_url = f"https://{domain_name}.com/domain.php"
-                logging.info(f"Domain URL bulundu: {domain_url}")
-                return domain_url
-            return None
-        except Exception as e:
-            logging.error(f"Script parse hatası: {str(e)}")
-            return None
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    def get_domain_php_url(self):
-        try:
-            response = self.session.get('https://monotv523.com/channel?id=yayinzirve')
-            if response.status_code != 200:
-                logging.error("monotv523.com'a erişilemedi")
-                return None
+session = requests.Session()
+session.headers.update({
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'Referer': 'https://monotv523.com/'
+})
 
-            script_pattern = r"eval\(function\(p,a,c,k,e,d\).*?split\('\|'\),0,{}\)\)"
-            script_match = re.search(script_pattern, response.text, re.DOTALL)
-            
-            if script_match:
-                return self.extract_domain_from_script(script_match.group(0))
-            
-            logging.error("Uygun script bulunamadı")
-            return None
-
-        except Exception as e:
-            logging.error(f"domain.php URL'si alınamadı: {str(e)}")
-            return None
-
-    def get_new_domain(self):
-        domain_php_url = self.get_domain_php_url()
-        if not domain_php_url:
-            return None
-
-        try:
-            response = self.session.get(domain_php_url)
-            if response.status_code == 200:
-                data = response.json()
-                new_domain = data.get('baseurl', '').rstrip('/')
-                return new_domain
-            else:
-                logging.error(f"Domain API yanıt vermedi. Status code: {response.status_code}")
-        except Exception as e:
-            logging.error(f"Yeni domain alınamadı: {str(e)}")
+def extract_baseurl_from_script(script_content):
+    """ Script içerisinden domain.php URL veya baseurl çıkart """
+    try:
+        split_pattern = r"'([^']+)'\.split\('\|'\)"
+        match = re.search(split_pattern, script_content)
+        if match:
+            parts = match.group(1).split('|')
+            if len(parts) > 3:
+                domain_php = f"https://{parts[3]}.com/domain.php"
+                response = session.get(domain_php, timeout=5)
+                if response.status_code == 200:
+                    data = response.json()
+                    return data.get('baseurl', '').rstrip('/')
+        return None
+    except Exception as e:
+        logging.warning(f"Baseurl alınamadı: {e}")
         return None
 
-    def read_m3u8_file(self):
-        try:
-            with open(self.m3u8_path, 'r', encoding='utf-8') as file:
-                return file.read()
-        except Exception as e:
-            logging.error(f"M3U8 dosyası okunamadı: {str(e)}")
-            return None
+def check_domain(domain_number):
+    """ Belirtilen domaini kontrol et ve baseurl döndür """
+    url = f"https://monotv{domain_number}.com/channel?id=yayinzirve"
+    try:
+        response = session.get(url, timeout=5)
+        if response.status_code == 200:
+            scripts = re.findall(r"<script.*?>(.*?)</script>", response.text, re.DOTALL)
+            for script in scripts:
+                baseurl = extract_baseurl_from_script(script)
+                if baseurl:
+                    logging.info(f"Aktif domain {domain_number}: {baseurl}")
+                    return baseurl
+        return None
+    except requests.RequestException:
+        return None
 
-    def update_m3u8_content(self, content, new_domain):
-        try:
-            current_domain_pattern = r'(https?://[^/]+/)(?=.*yayin)'
-            
-            matches = re.finditer(current_domain_pattern, content)
-            
-            if not matches:
-                logging.info("'yayin' içeren URL bulunamadı. Güncelleme gerekmiyor.")
-                return content
-    
-            updated_content = content
-            for match in matches:
-                current_domain = match.group(1)
-                
-                if current_domain == new_domain + '/':
-                    continue
-                
-                updated_content = updated_content.replace(current_domain, new_domain + '/')
-                logging.info(f"Domain güncellendi: {current_domain} -> {new_domain}/")
-    
-            return updated_content
-    
-        except Exception as e:
-            logging.error(f"İçerik güncelleme hatası: {str(e)}")
-            return content
+def read_m3u8():
+    try:
+        with open(M3U8_PATH, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        logging.error(f"M3U8 okunamadı: {e}")
+        return None
 
-    def commit_and_push_changes(self):
-        try:
-            repo = Repo(self.repo_path)
-            repo.index.add([self.m3u8_path])
-            commit_message = "🛠️ Auto: Linkler Güncellenmiştir"
-            repo.index.commit(commit_message)
-            origin = repo.remote('origin')
-            origin.push()
-            logging.info("Değişiklikler başarıyla commit ve push edildi")
-        except Exception as e:
-            logging.error(f"Git işlemleri sırasında hata: {str(e)}")
+def update_m3u8(content, new_baseurl):
+    pattern = r'https?://[^/]+/(?:.*yayin.*)'
+    updated = re.sub(pattern, lambda m: m.group(0).replace(m.group(0).split('/')[2], new_baseurl.split('//')[1]), content)
+    return updated
 
-    def update_streams(self):
-        new_domain = self.get_new_domain()
-        if not new_domain:
-            logging.error("Yeni domain alınamadı")
-            return
-
-        current_content = self.read_m3u8_file()
-        if not current_content:
-            return
-
-        updated_content = self.update_m3u8_content(current_content, new_domain)
-        
-        if updated_content != current_content:
-            try:
-                with open(self.m3u8_path, 'w', encoding='utf-8') as file:
-                    file.write(updated_content)
-                self.commit_and_push_changes()
-                logging.info("Stream domainleri başarıyla güncellendi")
-            except Exception as e:
-                logging.error(f"Dosya yazma hatası: {str(e)}")
-        else:
-            logging.info("Güncelleme gerekmiyor")
+def commit_changes():
+    try:
+        repo = Repo(REPO_PATH)
+        repo.index.add([M3U8_PATH])
+        repo.index.commit("🛠️ Auto: Linkler Güncellendi")
+        origin = repo.remote('origin')
+        origin.push()
+        logging.info("Değişiklikler Git'e push edildi")
+    except Exception as e:
+        logging.error(f"Git işlemleri hatası: {e}")
 
 def main():
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
-    updater = StreamUpdater()
-    updater.update_streams()
+    current_content = read_m3u8()
+    if not current_content:
+        return
+
+    updated_content = current_content
+    for i in range(START_DOMAIN, START_DOMAIN + DOMAIN_COUNT):
+        baseurl = check_domain(i)
+        if baseurl:
+            updated_content = update_m3u8(updated_content, baseurl)
+
+    if updated_content != current_content:
+        try:
+            with open(M3U8_PATH, 'w', encoding='utf-8') as f:
+                f.write(updated_content)
+            commit_changes()
+            logging.info("M3U8 güncellendi")
+        except Exception as e:
+            logging.error(f"M3U8 yazma hatası: {e}")
+    else:
+        logging.info("Güncelleme gerekli değil")
 
 if __name__ == "__main__":
     main()
