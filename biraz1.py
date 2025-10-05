@@ -6,7 +6,7 @@ from httpx import Client
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
-        # M3U dosyası dizini oluştur
+        # M3U dizini oluştur
         self.cikti_dosyasi = os.path.join(os.getcwd(), cikti_dosyasi)
         os.makedirs(os.path.dirname(self.cikti_dosyasi), exist_ok=True)
 
@@ -26,7 +26,7 @@ class OSIsportsManager:
             "androstreamlivechstream233","androstreamlivechstream234"
         ]
 
-        # Kanal isimleri (M3U içinde görünür isim)
+        # Kanal isimleri
         self.channel_names = {
             "androstreamlivebs1":"Beşiktaş Live 1",
             "androstreamlivebs2":"Beşiktaş Live 2",
@@ -53,33 +53,18 @@ class OSIsportsManager:
             "androstreamlivechstream234":"Channel 234"
         }
 
-        # Rastgele base URL’ler (her çalıştırmada farklı worker URL)
+        # Rastgele base URL’ler (her çalıştırmada farklı worker)
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
 
-        # Git kullanıcı bilgisi (commit için)
+        # Git için kullanıcı bilgisi
         subprocess.run(["git", "config", "--global", "user.email", "you@example.com"])
         subprocess.run(["git", "config", "--global", "user.name", "Your Name"])
 
-    def find_latest_domain(self):
-        # Max attempts kadar domain kontrolü
-        for i in range(self.start_number, self.start_number + self.max_attempts):
-            domain = f"https://birazcikspor{i}.xyz/"
-            try:
-                r = self.client.head(domain, timeout=5)
-                if r.status_code == 200:
-                    print(f"✅ Geçerli domain bulundu: {domain}")
-                    return domain
-            except Exception:
-                continue
-        fallback = f"https://birazcikspor{self.start_number}.xyz/"
-        print(f"⚠️ Geçerli domain bulunamadı, varsayılan: {fallback}")
-        return fallback
-
     def resolve_source_from_id(self, cid):
-        # M3U linki üret
+        # M3U8 linki üret
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream","")
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
@@ -89,9 +74,8 @@ class OSIsportsManager:
         return None
 
     def build_m3u8_content(self):
-        # M3U içeriği oluştur
+        # M3U içeriği
         m3u = ["#EXTM3U"]
-        latest_domain = self.find_latest_domain()
         for cid in self.channel_ids:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
@@ -100,13 +84,12 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # Güncel domain ve timestamp ekle
-        m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
-        m3u.append(latest_domain)
-        m3u.append(f'# Generated: {time.time()}')  # Unix timestamp ile her zaman farklı
+        # Güncel timestamp ekle
+        m3u.append(f'# Generated: {time.time()}')
         return "\n".join(m3u)
 
     def write_m3u_file(self):
+        # M3U dosyasını oluştur/güncelle
         print(f"⚠️ Dosya üzerine yazılıyor: {self.cikti_dosyasi}")
         m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
