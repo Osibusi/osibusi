@@ -32,12 +32,24 @@ jobs:
           echo "🚀 birazfull_otomatik.py çalıştırılıyor..."
           python birazfull_otomatik.py
 
-      # 5️⃣ Git değişikliklerini kaydet ve gönder
+      # 5️⃣ Değişiklikleri ekle ve push et (sorunsuz versiyon)
       - name: Değişiklikleri Git'e Ekle ve Push Et
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
+
+          # 🔧 Mevcut değişiklikleri stash’le (geçici olarak kaydet)
+          git stash || true
+
+          # 🔄 Uzak değişiklikleri çek
+          git pull origin main --rebase=false || true
+
+          # ♻️ Kaydedilen değişiklikleri geri getir
+          git stash pop || true
+
+          # ✅ Dosyaları ekle ve commit et
           git add M3U/Osibusibirazfull.m3u
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "🚫 Değişiklik yok"
+
+          # 🚀 Push işlemi
           git push origin main || echo "⚠️ Push başarısız olabilir, branch korumasını kontrol et"
