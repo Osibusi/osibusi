@@ -1,14 +1,15 @@
 from httpx import Client
 import os
-import random
+import time
 
 class OSIsportsManager:
-    def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=200):
+    def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
         os.makedirs(os.path.dirname(cikti_dosyasi), exist_ok=True)
         self.cikti_dosyasi = cikti_dosyasi
-        self.client = Client(timeout=10, verify=False)
+        self.client = Client(timeout=5, verify=False)
         self.start_number = start_number
         self.max_attempts = max_attempts
+
         self.channel_ids = [
             "androstreamlivebs1",
             "androstreamlivebs2",
@@ -31,41 +32,44 @@ class OSIsportsManager:
             "androstreamlivechstream233",
             "androstreamlivechstream234",
         ]
+
         self.baseurls = [
             "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/",
             "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
         ]
+
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
     def find_latest_domain(self):
-        for i in range(self.max_attempts):
-            number = self.start_number + i
-            domain = f"https://birazcikspor{number}.xyz/"
+        """En güncel geçerli domaini bulur."""
+        for i in range(self.start_number, self.start_number + self.max_attempts):
+            domain = f"https://birazcikspor{i}.xyz/"
             try:
-                r = self.client.get(domain, headers=self.headers)
+                r = self.client.head(domain, headers=self.headers, timeout=5)
                 if r.status_code == 200:
                     print(f"✅ Geçerli domain bulundu: {domain}")
                     return domain
             except Exception:
                 continue
-        fallback = f"https://birazcikspor{self.start_number}.xyz/"
-        print(f"⚠️ Geçerli domain bulunamadı, varsayılan: {fallback}")
-        return fallback
+        print("⚠️ Geçerli domain bulunamadı.")
+        return None
 
     def resolve_source_from_id(self, cid):
+        """Kanal ID'sinden M3U8 URL'si üretir."""
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream", "")
-            if not after:
-                return None
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
         elif cid.startswith("androstreamlive"):
-            baseurl = random.choice(self.baseurls)
-            return f"{baseurl}{cid}.m3u8"
+            # Baseurl listesinden sabit eşleme
+            index = self.channel_ids.index(cid) % len(self.baseurls)
+            return f"{self.baseurls[index]}{cid}.m3u8"
         return None
 
     def build_m3u8_content(self):
+        """M3U dosya içeriğini oluşturur."""
         m3u = ["#EXTM3U"]
         latest_domain = self.find_latest_domain()
+
         for cid in self.channel_ids:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
@@ -74,9 +78,14 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
-        # En güncel domain
-        m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
-        m3u.append(latest_domain)
+
+        # En güncel domaini ekle
+        if latest_domain:
+            m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
+            m3u.append(latest_domain)
+
+        # Zaman damgası ekle
+        m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
     def calistir(self):
