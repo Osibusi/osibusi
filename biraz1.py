@@ -23,6 +23,13 @@ class OSIsportsManager:
             "androstreamlivesm1",
             "androstreamlivesm2",
             "androstreamlivees1",
+            "androstreamlivees2",
+            "androstreamlivetb1",
+            "androstreamlivetb2",
+            "androstreamlivetb3",
+            "androstreamlivetb4",
+            "androstreamlivetb5",
+            "androstreamlivefb",
             "androstreamlivechstream233",
             "androstreamlivechstream234",
         ]
