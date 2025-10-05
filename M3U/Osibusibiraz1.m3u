@@ -1,38 +1,38 @@
 #EXTM3U
-#EXTINF:-1 group-title="Birazcikspor", Beşiktaş Live 1
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Beşiktaş Live 2
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Beşiktaş Live 3
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Beşiktaş Live 4
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs4.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Beşiktaş Live 5
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs5.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Trabzonspor Live 1
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor Live 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Trabzonspor Live 2
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor Live 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Trabzonspor Live 3
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor Live 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Süper Lig 1
+#EXTINF:-1 group-title="Birazcikspor", Smart Spor 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivesm1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Süper Lig 2
+#EXTINF:-1 group-title="Birazcikspor", Smart Spor 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivesm2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Espanyol Live 1
+#EXTINF:-1 group-title="Birazcikspor", Eurosport Live 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivees1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Espanyol Live 2
+#EXTINF:-1 group-title="Birazcikspor", Eurosport Live 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivees2.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Tivibu 1
@@ -70,4 +70,4 @@ https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
 https://bllovdes.d4ssgk.su/o1/stream234/playlist.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Güncel Domain
 https://birazcikspor27.xyz/
-# Generated: 2025-10-05 11:31:37
+# Generated: 2025-10-05 11:33:58
