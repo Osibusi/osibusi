@@ -28,18 +28,18 @@ class OSIsportsManager:
 
         # Kanal isimleri
         self.channel_names = {
-            "androstreamlivebs1":"Bein Spor Live 1",
-            "androstreamlivebs2":"Bein Spor Live 1",
-            "androstreamlivebs3":"Bein Spor Live 1",
-            "androstreamlivebs4":"Bein Spor Live 14",
-            "androstreamlivebs5":"Bein Spor Live 1",
-            "androstreamlivets1":"Tivibu Live 1",
-            "androstreamlivets2":"Tivibu Live 2",
-            "androstreamlivets3":"Tivibu Live 3",
-            "androstreamlivesm1":"Smart Spor 1",
-            "androstreamlivesm2":"Smart Spor 2",
-            "androstreamlivees1":"Eurosport Live 1",
-            "androstreamlivees2":"Eurosport Live 2",
+            "androstreamlivebs1":"Beşiktaş Live 1",
+            "androstreamlivebs2":"Beşiktaş Live 2",
+            "androstreamlivebs3":"Beşiktaş Live 3",
+            "androstreamlivebs4":"Beşiktaş Live 4",
+            "androstreamlivebs5":"Beşiktaş Live 5",
+            "androstreamlivets1":"Trabzonspor Live 1",
+            "androstreamlivets2":"Trabzonspor Live 2",
+            "androstreamlivets3":"Trabzonspor Live 3",
+            "androstreamlivesm1":"Süper Lig 1",
+            "androstreamlivesm2":"Süper Lig 2",
+            "androstreamlivees1":"Espanyol Live 1",
+            "androstreamlivees2":"Espanyol Live 2",
             "androstreamlivetb1":"Tivibu 1",
             "androstreamlivetb2":"Tivibu 2",
             "androstreamlivetb3":"Tivibu 3",
@@ -89,9 +89,11 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
+        # Güncel domain ve timestamp + random ID ile içerik değişikliği garanti
         m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
         m3u.append(latest_domain)
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
+        m3u.append(f'# RandomID: {random.randint(100000,999999)}')
         return "\n".join(m3u)
 
     # Dosyayı güvenle yaz
@@ -105,12 +107,12 @@ class OSIsportsManager:
         except Exception as e:
             print(f"❌ Dosya yazılamadı: {e}")
 
-    # Git commit & push
+    # Git commit & push (her durumda commit)
     def git_commit_and_push(self):
         try:
             subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
             commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
-            subprocess.run(["git", "commit", "-m", commit_msg], check=True)
+            subprocess.run(["git", "commit", "-m", commit_msg, "--allow-empty"], check=True)
             subprocess.run(["git", "push", "origin", "main"], check=True)
             print("✅ Git commit ve push tamamlandı.")
         except subprocess.CalledProcessError as e:
