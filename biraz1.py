@@ -103,7 +103,7 @@ class OSIsportsManager:
             stream_url = self.resolve_source_from_id(cid)
             if not stream_url:
                 continue
-            channel_name = cid.replace("-", " ").title()
+            channel_name = self.channel_names.get(cid, cid.replace("-", " ").title())
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", {channel_name}')
             m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u.append(stream_url)
@@ -114,9 +114,8 @@ class OSIsportsManager:
         return "\n".join(m3u)
 
     def write_m3u_file(self):
-        # Eğer dosya yoksa veya eski dosya silinmişse yeniden oluştur
-        if not os.path.exists(self.cikti_dosyasi):
-            print("⚠️ M3U dosyası bulunamadı, yeniden oluşturuluyor...")
+        # Dosya her zaman yeniden yazılır
+        print("⚠️ M3U dosyası yeniden oluşturuluyor/güncelleniyor...")
         m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
             f.write(m3u_content)
