@@ -13,18 +13,60 @@ class OSIsportsManager:
         self.start_number = start_number
         self.max_attempts = max_attempts
 
-        self.channel_ids = [
-            "androstreamlivebs1": "Beşiktaş Live 1","androstreamlivebs2","androstreamlivebs3",
-            "androstreamlivebs4","androstreamlivebs5","androstreamlivets1",
-            "androstreamlivets2","androstreamlivets3","androstreamlivesm1",
-            "androstreamlivesm2","androstreamlivees1","androstreamlivees2",
-            "androstreamlivetb1","androstreamlivetb2","androstreamlivetb3",
-            "androstreamlivetb4","androstreamlivetb5","androstreamlivefb",
-            "androstreamlivetrt1","androstreamlivetrts","androstreamliveht",
-            "androstreamlivechstream233","androstreamlivechstream234"
-        ]
+        # Kanal ID’leri listesi
+self.channel_ids = [
+    "androstreamlivebs1",
+    "androstreamlivebs2",
+    "androstreamlivebs3",
+    "androstreamlivebs4",
+    "androstreamlivebs5",
+    "androstreamlivets1",
+    "androstreamlivets2",
+    "androstreamlivets3",
+    "androstreamlivesm1",
+    "androstreamlivesm2",
+    "androstreamlivees1",
+    "androstreamlivees2",
+    "androstreamlivetb1",
+    "androstreamlivetb2",
+    "androstreamlivetb3",
+    "androstreamlivetb4",
+    "androstreamlivetb5",
+    "androstreamlivefb",
+    "androstreamlivetrt1",
+    "androstreamlivetrts",
+    "androstreamliveht",
+    "androstreamlivechstream233",
+    "androstreamlivechstream234"
+]
 
-        self.baseurls = [
+# Kanallara özel isim atamak için dictionary
+self.channel_names = {
+    "androstreamlivebs1": "Beşiktaş Live 1",
+    "androstreamlivebs2": "Beşiktaş Live 2",
+    "androstreamlivebs3": "Beşiktaş Live 3",
+    "androstreamlivebs4": "Beşiktaş Live 4",
+    "androstreamlivebs5": "Beşiktaş Live 5",
+    "androstreamlivets1": "Trabzonspor Live 1",
+    "androstreamlivets2": "Trabzonspor Live 2",
+    "androstreamlivets3": "Trabzonspor Live 3",
+    "androstreamlivesm1": "Süper Lig 1",
+    "androstreamlivesm2": "Süper Lig 2",
+    "androstreamlivees1": "Espanyol Live 1",
+    "androstreamlivees2": "Espanyol Live 2",
+    "androstreamlivetb1": "Tivibu 1",
+    "androstreamlivetb2": "Tivibu 2",
+    "androstreamlivetb3": "Tivibu 3",
+    "androstreamlivetb4": "Tivibu 4",
+    "androstreamlivetb5": "Tivibu 5",
+    "androstreamlivefb": "Fenerbahçe Live",
+    "androstreamlivetrt1": "TRT 1",
+    "androstreamlivetrts": "TRT Spor",
+    "androstreamliveht": "HT Spor",
+    "androstreamlivechstream233": "Channel 233",
+    "androstreamlivechstream234": "Channel 234"
+}
+          self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
         ]
