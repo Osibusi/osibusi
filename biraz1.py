@@ -75,7 +75,7 @@ class OSIsportsManager:
             "androstreamlivetv8": "Tv 8",
             "androstreamlivetrts": "TRT Spor",
             "androstreamliveht": "HT Spor",
-            "androstreamliveht": "AT TV █",
+            "androstreamlivetjk": "AT TV █",
             "androstreamlivechstream233": "Channel 233",
             "androstreamlivechstream234": "Channel 234"
         }
