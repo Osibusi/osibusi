@@ -1,7 +1,8 @@
-from httpx import Client
 import os
 import time
 import random
+from httpx import Client
+import subprocess
 
 class OSIsportsManager:
     def __init__(self, cikti_dosyasi="M3U/Osibusibiraz1.m3u", start_number=27, max_attempts=50):
@@ -34,7 +35,7 @@ class OSIsportsManager:
             "androstreamlivechstream234",
         ]
 
-        # Baseurl'leri rastgele değiştirerek M3U içeriğini farklılaştırıyoruz
+        # Rastgele baseurl kullanımı ile M3U içeriğini her çalıştırmada biraz farklılaştır
         self.baseurls = [
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
             f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
@@ -43,7 +44,6 @@ class OSIsportsManager:
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
     def find_latest_domain(self):
-        """En güncel geçerli domaini bulur."""
         for i in range(self.start_number, self.start_number + self.max_attempts):
             domain = f"https://birazcikspor{i}.xyz/"
             try:
@@ -57,7 +57,6 @@ class OSIsportsManager:
         return None
 
     def resolve_source_from_id(self, cid):
-        """Kanal ID'sinden M3U8 URL'si üretir."""
         if cid.startswith("androstreamlivechstream"):
             after = cid.replace("androstreamlivechstream", "")
             return f"https://bllovdes.d4ssgk.su/o1/stream{after}/playlist.m3u8"
@@ -67,7 +66,6 @@ class OSIsportsManager:
         return None
 
     def build_m3u8_content(self):
-        """M3U dosya içeriğini oluşturur."""
         m3u = ["#EXTM3U"]
         latest_domain = self.find_latest_domain()
 
@@ -84,17 +82,34 @@ class OSIsportsManager:
             m3u.append(f'#EXTINF:-1 group-title="Birazcikspor", Güncel Domain')
             m3u.append(latest_domain)
 
-        # Zaman damgası içerikte kalsın, dosya adı değişmeden M3U her zaman güncel görünsün
+        # Zaman damgası içerikte kalsın
         m3u.append(f'# Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}')
         return "\n".join(m3u)
 
-    def calistir(self):
-        print("🚀 M3U dosyası oluşturuluyor...")
-        m3u_icerik = self.build_m3u8_content()
-        # Dosya her çalıştırmada üzerine yazılıyor
+    def write_m3u_file(self):
+        m3u_content = self.build_m3u8_content()
         with open(self.cikti_dosyasi, "w", encoding="utf-8") as f:
-            f.write(m3u_icerik)
-        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla güncellendi.")
+            f.write(m3u_content)
+        print(f"✅ M3U dosyası '{self.cikti_dosyasi}' başarıyla oluşturuldu.")
+
+    def git_commit_and_push(self):
+        try:
+            # Git add
+            subprocess.run(["git", "add", self.cikti_dosyasi], check=True)
+            # Git commit
+            commit_msg = f"Update M3U: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+            subprocess.run(["git", "commit", "-m", commit_msg], check=True)
+            # Git push
+            subprocess.run(["git", "push", "origin", "main"], check=True)
+            print("✅ Git commit ve push işlemi başarıyla tamamlandı.")
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ Git işlemlerinde hata oluştu: {e}")
+
+    def run(self):
+        print("🚀 M3U dosyası oluşturuluyor ve Git ile entegre ediliyor...")
+        self.write_m3u_file()
+        self.git_commit_and_push()
 
 if __name__ == "__main__":
-    OSIsportsManager().calistir()
+    manager = OSIsportsManager()
+    manager.run()
