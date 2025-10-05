@@ -14,6 +14,12 @@ https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamliveb
 #EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs5.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebsm1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebsm2.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Tivibu Spor Live 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets1.m3u8
@@ -35,33 +41,45 @@ https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivee
 #EXTINF:-1 group-title="Birazcikspor", Eurosport Live 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivees2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tivibu 1
+#EXTINF:-1 group-title="Birazcikspor", Tabi 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetb1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tivibu 2
+#EXTINF:-1 group-title="Birazcikspor", Tabi 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetb2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tivibu 3
+#EXTINF:-1 group-title="Birazcikspor", Tabi 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetb3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tivibu 4
+#EXTINF:-1 group-title="Birazcikspor", Tabi 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetb4.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tivibu 5
+#EXTINF:-1 group-title="Birazcikspor", Tabi 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetb5.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Fenerbahçe Live
+#EXTINF:-1 group-title="Birazcikspor", Sports 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivess1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Sports 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivess2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", ® Fenerbahçe Live
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivefb.m3u8
 #EXTINF:-1 group-title="Birazcikspor", TRT 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetrt1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tv 8
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetv8.m3u8
 #EXTINF:-1 group-title="Birazcikspor", TRT Spor
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetrts.m3u8
-#EXTINF:-1 group-title="Birazcikspor", HT Spor
+#EXTINF:-1 group-title="Birazcikspor", AT TV █
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamliveht.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivetjk
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivetjk.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Channel 233
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
@@ -70,4 +88,4 @@ https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
 https://bllovdes.d4ssgk.su/o1/stream234/playlist.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Güncel Domain
 https://birazcikspor27.xyz/
-# Generated: 2025-10-05 11:33:58
+# Generated: 2025-10-05 11:49:07
