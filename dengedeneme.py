@@ -51,7 +51,7 @@ class Dengetv54Manager:
     # Referer taraması
     def find_working_domain(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(65, 165):
+        for i in range(54, 105):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
@@ -59,35 +59,39 @@ class Dengetv54Manager:
                 if r.status_code == 200 and r.text.strip():
                     print(f"✅ Çalışan referer bulundu: {test_domain}")
                     return test_domain
-            except:
+            except Exception as e:
+                print(f"❌ Hata: {e}")
                 continue
         print("❌ Hiçbir referer bulunamadı!")
         return None
 
-    # Zirvedesin domain taraması (audi sabit)
+    # Zirvedesin domain taraması (audi sabit, GET ile)
     def find_zirvedesin_domain(self):
         headers = {"User-Agent": "Mozilla/5.0"}
         for i in range(1, 100):
             test_domain = f"https://audi.zirvedesin{i}.sbs/"
             try:
-                r = self.httpx.head(f"{test_domain}{self.channel_files[0]}", headers=headers)
+                r = self.httpx.get(f"{test_domain}{self.channel_files[0]}", headers=headers)
+                print(f"🔍 {test_domain} status: {r.status_code}")
                 if r.status_code == 200:
                     print(f"✅ Çalışan zirvedesin domain bulundu: {test_domain}")
                     return test_domain
-            except:
+            except Exception as e:
+                print(f"❌ Hata: {e}")
                 continue
-        print("❌ Hiçbir zirvedesin domain bulunamadı!")
+        print("❌ Hiçbir zirvedesin domain bulunamadı! Varsayılan olarak referer ile devam edilecek.")
         return None
 
     # M3U içeriği oluştur
     def build_m3u8_content(self):
         m3u_content = ["#EXTM3U"]
+        domain = self.zirvedesin_domain if self.zirvedesin_domain else self.referer_url
         for file_name in self.channel_files:
             channel_name = file_name.replace(".m3u8", "").capitalize()
             m3u_content.append(f'#EXTINF:-1 group-title="Dengetv54",{channel_name}')
             m3u_content.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u_content.append(f'#EXTVLCOPT:http-referrer={self.referer_url}')
-            m3u_content.append(f"{self.zirvedesin_domain}{file_name}")
+            m3u_content.append(f"{domain}{file_name}")
         return "\n".join(m3u_content)
 
     # M3U dosyasını güncelle
@@ -100,17 +104,14 @@ class Dengetv54Manager:
     def calistir(self):
         self.referer_url = self.find_working_domain()
         if not self.referer_url:
-            print("❌ Referer bulunamadığı için işlem iptal edildi.")
-            return
+            print("❌ Referer bulunamadığı için işlem iptal edildi. M3U yine de oluşturuluyor.")
+            self.referer_url = ""  # Varsayılan boş
 
         self.zirvedesin_domain = self.find_zirvedesin_domain()
-        if not self.zirvedesin_domain:
-            print("❌ Zirvedesin domain bulunamadığı için işlem iptal edildi.")
-            return
 
         m3u8_icerik = self.build_m3u8_content()
         self.ana_m3u_guncelle(m3u8_icerik)
-        print("✅ Kanallar başarıyla eklendi.")
+        print("✅ Kanallar başarıyla eklendi veya varsayılan referer ile M3U oluşturuldu.")
 
 
 if __name__ == "__main__":
