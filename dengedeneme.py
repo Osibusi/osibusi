@@ -1,49 +1,12 @@
 from httpx import Client
+from bs4 import BeautifulSoup
 import os
 
-class Dengetv54Manager:
+class DengetvManager:
     def __init__(self, ana_m3u_dosyasi):
         self.ana_m3u_dosyasi = ana_m3u_dosyasi
         self.httpx = Client(timeout=10, verify=False)
         self.referer_url = None
-        self.zirvedesin_domain = None
-        self.channel_files = [
-            "yayinzirve.m3u8",
-            "yayin1.m3u8",
-            "yayininat.m3u8",
-            "yayinb2.m3u8",
-            "yayinb3.m3u8",
-            "yayinb4.m3u8",
-            "yayinb5.m3u8",
-            "yayinbm1.m3u8",
-            "yayinbm2.m3u8",
-            "yayinss.m3u8",
-            "yayinss2.m3u8",
-            "yayint1.m3u8",
-            "yayint2.m3u8",
-            "yayint3.m3u8",
-            "yayinsmarts.m3u8",
-            "yayinsms2.m3u8",
-            "yayintrtspor.m3u8",
-            "yayintrtspor2.m3u8",
-            "yayintrt1.m3u8",
-            "yayinas.m3u8",
-            "yayinatv.m3u8",
-            "yayintv8.m3u8",
-            "yayintv85.m3u8",
-            "yayinf1.m3u8",
-            "yayinnbatv.m3u8",
-            "yayineu1.m3u8",
-            "yayineu2.m3u8",
-            "yayinex1.m3u8",
-            "yayinex2.m3u8",
-            "yayinex3.m3u8",
-            "yayinex4.m3u8",
-            "yayinex5.m3u8",
-            "yayinex6.m3u8",
-            "yayinex7.m3u8",
-            "yayinex8.m3u8"
-        ]
 
         # M3U klasörünü oluştur
         os.makedirs(os.path.dirname(self.ana_m3u_dosyasi), exist_ok=True)
@@ -65,55 +28,67 @@ class Dengetv54Manager:
         print("❌ Hiçbir referer bulunamadı!")
         return None
 
-    # Zirvedesin domain taraması (audi sabit, GET ile)
-    def find_zirvedesin_domain(self):
+    # Yayın ID’lerini sayfadan al
+    def get_channel_ids(self, domain):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(1, 100):
-            test_domain = f"https://audi.zirvedesin{i}.sbs/"
-            try:
-                r = self.httpx.get(f"{test_domain}{self.channel_files[0]}", headers=headers)
-                print(f"🔍 {test_domain} status: {r.status_code}")
-                if r.status_code == 200:
-                    print(f"✅ Çalışan zirvedesin domain bulundu: {test_domain}")
-                    return test_domain
-            except Exception as e:
-                print(f"❌ Hata: {e}")
-                continue
-        print("❌ Hiçbir zirvedesin domain bulunamadı! Varsayılan olarak referer ile devam edilecek.")
-        return None
+        try:
+            r = self.httpx.get(domain, headers=headers)
+            if r.status_code != 200:
+                print(f"❌ Sayfa yüklenemedi: {domain}")
+                return []
+
+            soup = BeautifulSoup(r.text, "html.parser")
+            channel_ids = []
+
+            # Tüm <a> veya <iframe> içindeki URL’leri tara
+            for a in soup.find_all(['a', 'iframe']):
+                href = a.get('href')
+                if href and 'channel?id=' in href:
+                    # channel?id=yayin1 → yayin1
+                    channel_id = href.split('channel?id=')[-1].split('&')[0]
+                    if channel_id not in channel_ids:
+                        channel_ids.append(channel_id)
+
+            print(f"✅ {len(channel_ids)} kanal bulundu.")
+            return channel_ids
+        except Exception as e:
+            print(f"❌ Hata: {e}")
+            return []
 
     # M3U içeriği oluştur
-    def build_m3u8_content(self):
+    def build_m3u_content(self, channel_ids):
         m3u_content = ["#EXTM3U"]
-        domain = self.zirvedesin_domain if self.zirvedesin_domain else self.referer_url
-        for file_name in self.channel_files:
-            channel_name = file_name.replace(".m3u8", "").capitalize()
+        for channel_id in channel_ids:
+            channel_name = channel_id.capitalize()
             m3u_content.append(f'#EXTINF:-1 group-title="Dengetv54",{channel_name}')
             m3u_content.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u_content.append(f'#EXTVLCOPT:http-referrer={self.referer_url}')
-            m3u_content.append(f"{domain}{file_name}")
+            m3u_content.append(f"{self.referer_url}channel?id={channel_id}")
         return "\n".join(m3u_content)
 
-    # M3U dosyasını güncelle
-    def ana_m3u_guncelle(self, yeni_icerik):
+    # M3U dosyasını kaydet
+    def save_m3u(self, content):
         with open(self.ana_m3u_dosyasi, "w", encoding="utf-8") as f:
-            f.write(yeni_icerik)
-        print(f"💾 {self.ana_m3u_dosyasi} güncellendi.")
+            f.write(content)
+        print(f"💾 {self.ana_m3u_dosyasi} kaydedildi.")
 
     # Scripti çalıştır
     def calistir(self):
         self.referer_url = self.find_working_domain()
         if not self.referer_url:
-            print("❌ Referer bulunamadığı için işlem iptal edildi. M3U yine de oluşturuluyor.")
-            self.referer_url = ""  # Varsayılan boş
+            print("❌ Referer bulunamadı, M3U oluşturulamıyor.")
+            return
 
-        self.zirvedesin_domain = self.find_zirvedesin_domain()
+        channel_ids = self.get_channel_ids(self.referer_url)
+        if not channel_ids:
+            print("❌ Kanal ID’si bulunamadı, M3U oluşturulamıyor.")
+            return
 
-        m3u8_icerik = self.build_m3u8_content()
-        self.ana_m3u_guncelle(m3u8_icerik)
-        print("✅ Kanallar başarıyla eklendi veya varsayılan referer ile M3U oluşturuldu.")
+        m3u_content = self.build_m3u_content(channel_ids)
+        self.save_m3u(m3u_content)
+        print("✅ Kanallar başarıyla M3U’ye eklendi.")
 
 
 if __name__ == "__main__":
-    manager = Dengetv54Manager("M3U/osibusidengedeneme.m3u")
+    manager = DengetvManager("M3U/osibusidengedeneme.m3u")
     manager.calistir()
