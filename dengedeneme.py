@@ -51,7 +51,7 @@ class Dengetv54Manager:
     # Referer taraması
     def find_working_domain(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(54, 105):
+        for i in range(65, 165):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
