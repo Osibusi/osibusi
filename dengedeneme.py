@@ -7,67 +7,60 @@ class DengetvManager:
         self.httpx = Client(timeout=10, verify=False)
         self.referer_url = None
 
-        # Tüm kanal ID’leri
+        # Kanal ID'leri
         self.channel_ids = [
-            "yayinzirve","yayin1","yayininat","yayinb2","yayinb3","yayinb4","yayinb5",
-            "yayinbm1","yayinbm2","yayinss","yayinss2","yayint1","yayint2","yayint3",
-            "yayinsmarts","yayinsms2","yayintrtspor","yayintrtspor2","yayintrt1",
-            "yayinas","yayinatv","yayintv8","yayintv85","yayinf1","yayinnbatv",
-            "yayineu1","yayineu2","yayinex1","yayinex2","yayinex3","yayinex4",
-            "yayinex5","yayinex6","yayinex7","yayinex8"
+            "zirve", "1", "inat", "b2", "b3",
+            "b4", "b5", "bm1", "bm2", "ss",
+            "ss2", "t1", "t2", "t3", "smarts",
+            "sms2", "trtspor", "trtspor2", "trt1",
+            "as", "atv", "tv8", "tv85", "f1",
+            "nbatv", "eu1", "eu2", "ex1", "ex2",
+            "ex3", "ex4", "ex5", "ex6", "ex7",
+            "ex8"
         ]
 
-        # M3U klasörünü oluştur
         os.makedirs(os.path.dirname(self.ana_m3u_dosyasi), exist_ok=True)
 
-    # Çalışan referer URL bul
-    def find_working_referer(self):
+    def find_working_denge(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(65, 105):
+        for i in range(66, 161):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
                 r = self.httpx.get(test_domain, headers=headers)
                 if r.status_code == 200 and r.text.strip():
                     print(f"✅ Çalışan referer bulundu: {test_domain}")
-                    self.referer_url = test_domain
-                    return True
-            except Exception as e:
+                    return test_domain
+            except:
                 continue
-        print("❌ Hiçbir referer bulunamadı!")
-        return False
+        print("❌ Hiçbir dengetv domain bulunamadı!")
+        return None
 
-    # M3U içeriği oluştur
-    def build_m3u_content(self):
-        if not self.referer_url:
-            print("❌ Referer bulunamadığı için M3U oluşturulamıyor.")
-            return ""
-
+    def build_m3u8_content(self):
+        base_url = "https://audi.zirvedesin19.sbs/"  # Zirvedesin sabit
         m3u_content = ["#EXTM3U"]
         for channel_id in self.channel_ids:
-            channel_name = channel_id.capitalize()
-            m3u_content.append(f'#EXTINF:-1 group-title="Dengetv54",{channel_name}')
+            m3u_content.append(f'#EXTINF:-1 group-title="Dengetv54",Yayin{channel_id.capitalize()}')
             m3u_content.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
             m3u_content.append(f'#EXTVLCOPT:http-referrer={self.referer_url}')
-            m3u_content.append(f"{self.referer_url}channel?id={channel_id}")
+            m3u_content.append(f'{base_url}yayin{channel_id}.m3u8')
         return "\n".join(m3u_content)
 
-    # M3U dosyasını kaydet
     def save_m3u(self, content):
-        if not content:
-            return
         with open(self.ana_m3u_dosyasi, "w", encoding="utf-8") as f:
             f.write(content)
         print(f"💾 {self.ana_m3u_dosyasi} kaydedildi.")
 
-    # Scripti çalıştır
-    def calistir(self):
-        if self.find_working_referer():
-            m3u_content = self.build_m3u_content()
-            self.save_m3u(m3u_content)
-            print("✅ Tüm kanallar başarıyla M3U’ye eklendi.")
+    def run(self):
+        self.referer_url = self.find_working_denge()
+        if not self.referer_url:
+            print("❌ Denge referer bulunamadığı için işlem iptal edildi.")
+            return
+        m3u_content = self.build_m3u8_content()
+        self.save_m3u(m3u_content)
+        print("✅ Kanallar başarıyla M3U’ye eklendi.")
 
 
 if __name__ == "__main__":
     manager = DengetvManager("M3U/osibusidengedeneme.m3u")
-    manager.calistir()
+    manager.run()
