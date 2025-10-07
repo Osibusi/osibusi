@@ -7,7 +7,7 @@ os.makedirs("M3U", exist_ok=True)
 # Kanal listesi
 kanallar = {
     "yayinzirve": "Yayinzirve",
-    "yayin1": "Yayin1",
+    "yayin1": "TRGOALS",
     "yayininat": "Yayininat",
     "yayinb2": "BEINSPOR 2",
     "yayinb3": "BEINSPOR 3",
