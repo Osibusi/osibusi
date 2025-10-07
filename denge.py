@@ -45,9 +45,12 @@ class Dengetv54Manager:
             36: "yayinex8.m3u8"
         }
 
+        # M3U klasörünü oluştur
+        os.makedirs(os.path.dirname(self.ana_m3u_dosyasi), exist_ok=True)
+
     def find_working_domain(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(54, 105):  # 54'ten 104'e kadar
+        for i in range(54, 105):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
@@ -71,6 +74,7 @@ class Dengetv54Manager:
         return "\n".join(m3u_content)
 
     def ana_m3u_guncelle(self, yeni_icerik):
+        # Dosya yoksa oluştur
         if not os.path.exists(self.ana_m3u_dosyasi):
             print(f"⚠️ Dosya yok, yeni oluşturuluyor: {self.ana_m3u_dosyasi}")
             with open(self.ana_m3u_dosyasi, "w", encoding='utf-8') as f:
@@ -106,5 +110,6 @@ class Dengetv54Manager:
 
 
 if __name__ == "__main__":
-    manager = Dengetv54Manager("osibusidenge.m3u")
+    # Artık M3U klasörüne yazıyor
+    manager = Dengetv54Manager("M3U/osibusidenge.m3u")
     manager.calistir()
