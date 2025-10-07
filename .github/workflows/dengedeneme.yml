@@ -32,6 +32,7 @@ jobs:
 
       - name: OSIBUSI Script Çalıştır
         run: |
+          # Script M3U klasöründe çıktı oluşturmalı
           python dengedeneme.py
           if [ ! -f "M3U/osibusidengedeneme.m3u" ]; then
             echo "⚠️ osibusidengedeneme.m3u bulunamadı! Script çıktı üretmedi."
@@ -39,10 +40,15 @@ jobs:
             echo "✅ osibusidengedeneme.m3u başarıyla oluşturuldu veya güncellendi."
           fi
 
-      - name: Playlist'i Commit Et
+      - name: Playlist'i Commit Et ve Gönder
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Uzak depodaki değişiklikleri al
+          git fetch origin main
+          git pull origin main --rebase || true
+
           git add M3U/osibusidengedeneme.m3u
 
           if git diff --cached --quiet; then
@@ -51,4 +57,4 @@ jobs:
           fi
 
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
