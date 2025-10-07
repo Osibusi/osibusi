@@ -23,7 +23,7 @@ class DengetvManager:
     # Çalışan referer URL bul
     def find_working_referer(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(54, 105):
+        for i in range(65, 105):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
