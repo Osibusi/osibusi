@@ -14,7 +14,7 @@ class DengetvManager:
     # Referer taraması
     def find_working_domain(self):
         headers = {"User-Agent": "Mozilla/5.0"}
-        for i in range(65, 165):
+        for i in range(54, 105):
             test_domain = f"https://dengetv{i}.live/"
             print(f"🔍 {test_domain} kontrol ediliyor...")
             try:
@@ -28,7 +28,7 @@ class DengetvManager:
         print("❌ Hiçbir referer bulunamadı!")
         return None
 
-    # Yayın ID’lerini sayfadan al
+    # Sayfadaki tüm kanal ID’lerini al
     def get_channel_ids(self, domain):
         headers = {"User-Agent": "Mozilla/5.0"}
         try:
@@ -40,16 +40,16 @@ class DengetvManager:
             soup = BeautifulSoup(r.text, "html.parser")
             channel_ids = []
 
-            # Tüm <a> veya <iframe> içindeki URL’leri tara
-            for a in soup.find_all(['a', 'iframe']):
-                href = a.get('href')
-                if href and 'channel?id=' in href:
-                    # channel?id=yayin1 → yayin1
-                    channel_id = href.split('channel?id=')[-1].split('&')[0]
-                    if channel_id not in channel_ids:
-                        channel_ids.append(channel_id)
+            # Tüm iframe ve a taglerini tara
+            for tag in soup.find_all(['iframe', 'a']):
+                for attr in ['src', 'href']:
+                    val = tag.get(attr)
+                    if val and 'channel?id=' in val:
+                        channel_id = val.split('channel?id=')[-1].split('&')[0]
+                        if channel_id not in channel_ids:
+                            channel_ids.append(channel_id)
 
-            print(f"✅ {len(channel_ids)} kanal bulundu.")
+            print(f"✅ {len(channel_ids)} kanal bulundu: {channel_ids}")
             return channel_ids
         except Exception as e:
             print(f"❌ Hata: {e}")
