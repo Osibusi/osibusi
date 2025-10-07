@@ -3,7 +3,7 @@
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinzirve.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayin1
+#EXTINF:-1 group-title="Dengetv54",TRGOALS
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayin1.m3u8
@@ -43,99 +43,99 @@ https://audi.zirvedesin19.sbs/yayinss.m3u8
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinss2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayint1
+#EXTINF:-1 group-title="Dengetv54",TİVİBU 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayint1.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayint2
+#EXTINF:-1 group-title="Dengetv54",TİVİBU 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayint2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayint3
+#EXTINF:-1 group-title="Dengetv54",TİVİBU 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayint3.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinsmarts
+#EXTINF:-1 group-title="Dengetv54",SMART SPOR 
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinsmarts.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinsms2
+#EXTINF:-1 group-title="Dengetv54",SMART SPOR 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinsms2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayintrtspor
+#EXTINF:-1 group-title="Dengetv54",TRT SPOR
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintrtspor.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayintrtspor2
+#EXTINF:-1 group-title="Dengetv54",TRT SPOR 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintrtspor2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayintrt1
+#EXTINF:-1 group-title="Dengetv54",TRT 1 
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintrt1.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinas
+#EXTINF:-1 group-title="Dengetv54",A SPOR
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinas.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinatv
+#EXTINF:-1 group-title="Dengetv54",ATV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinatv.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayintv8
+#EXTINF:-1 group-title="Dengetv54",TV8
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintv8.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayintv85
+#EXTINF:-1 group-title="Dengetv54",TV 8.5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintv85.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinf1
+#EXTINF:-1 group-title="Dengetv54",SKY SPORTS
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinf1.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinnbatv
+#EXTINF:-1 group-title="Dengetv54",NBA TV
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinnbatv.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayineu1
+#EXTINF:-1 group-title="Dengetv54",EUROSPORT 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayineu1.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayineu2
+#EXTINF:-1 group-title="Dengetv54",EUROSPORT 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayineu2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex1
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex1.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex2
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex2.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex3
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex3.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex4
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex4.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex5
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex5.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex6
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 6
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex6.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex7
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex7.m3u8
-#EXTINF:-1 group-title="Dengetv54",Yayinex8
+#EXTINF:-1 group-title="Dengetv54",TABİ SPOR 8
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayinex8.m3u8
