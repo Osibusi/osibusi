@@ -1,31 +1,34 @@
 import requests
-import json
 from pathlib import Path
+
+# Kontrol edilecek domain aralığı
+start = 65
+end = 160
+
+baseurl = None
+
+for i in range(start, end + 1):
+    domain = f"https://dengetv{i}.live/"
+    print(f"🔍 {domain} kontrol ediliyor...")
+    try:
+        # domain.php'nin JSON döndürdüğünü varsayalım
+        r = requests.get(domain + "domain.php", timeout=5)
+        r.raise_for_status()
+        data = r.json()
+        if "baseurl" in data and data["baseurl"]:
+            baseurl = data["baseurl"]
+            print(f"✅ Çalışan referer bulundu: {domain} → baseurl: {baseurl}")
+            break
+    except Exception as e:
+        print(f"❌ Hata: {e}")
+
+if not baseurl:
+    print("❌ Hiçbir geçerli domain bulunamadı!")
+    exit(1)
 
 # Çıktı dosyası
 m3u_file = Path("M3U/osibusideneme.m3u")
 m3u_file.parent.mkdir(exist_ok=True)
-
-# Çalışan referer siteleri (denge66’dan başlıyor)
-sites = [f"https://dengetv{i}.live/" for i in range(66, 170)]
-
-baseurl = None
-for site in sites:
-    try:
-        # domain.php veya baseurl endpoint'i
-        r = requests.get(site + "domain.php", timeout=5)
-        if r.status_code == 200:
-            data = r.json()
-            baseurl = data.get("baseurl")
-            if baseurl:
-                print(f"✅ Çalışan referer bulundu: {site}")
-                break
-    except Exception as e:
-        print(f"❌ {site} kontrol ediliyor... Hata: {e}")
-
-if not baseurl:
-    print("❌ Hiçbir baseurl bulunamadı. Script durdu.")
-    exit(1)
 
 # Kanal id’leri
 kanallar = [
@@ -42,10 +45,4 @@ kanallar = [
 with open(m3u_file, "w", encoding="utf-8") as f:
     f.write("#EXTM3U\n")
     for kanal in kanallar:
-        url = f"{baseurl}{kanal}.m3u8"
-        f.write(f"#EXTINF:-1 group-title=\"Dengetv54\", {kanal}\n")
-        f.write("#EXTVLCOPT:http-user-agent=Mozilla/5.0\n")
-        f.write(f"#EXTVLCOPT:http-referrer={baseurl}\n")
-        f.write(url + "\n")
-
-print(f"💾 M3U dosyası kaydedildi: {m3u_file}")
+        url = f"{baseurl}channe
