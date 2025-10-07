@@ -1,35 +1,51 @@
-import os
+import requests
+import json
+from pathlib import Path
 
-class ZirvedesinM3U:
-    def __init__(self, ana_m3u_dosyasi):
-        self.ana_m3u_dosyasi = ana_m3u_dosyasi
-        self.baseurl = "https://audi.zirvedesin19.sbs/"
-        self.channels = [
-            "yayinzirve","yayinb2","yayinb3","yayinb4","yayinb5",
-            "yayinbm1","yayinbm2","yayinss","yayinss2","yayint1",
-            "yayint2","yayint3","yayint4","yayinsmarts","yayineu1",
-            "yayineu2","yayinex1","yayinex2","yayinex3","yayinex4",
-            "yayinex5","yayinex6","yayinex7","yayinex8","yayintrtspor",
-            "yayintrtspor2","yayintrt1","yayinf1","yayinas","yayinsms2",
-            "yayinatv","yayintv8","yayintv85","yayinnbatv"
-        ]
-        os.makedirs(os.path.dirname(self.ana_m3u_dosyasi), exist_ok=True)
+# Çıktı dosyası
+m3u_file = Path("M3U/osibusideneme.m3u")
+m3u_file.parent.mkdir(exist_ok=True)
 
-    def build_m3u(self):
-        m3u = ["#EXTM3U"]
-        for ch in self.channels:
-            m3u.append(f'#EXTINF:-1 group-title="Zirvedesin",{ch.capitalize()}')
-            m3u.append('#EXTVLCOPT:http-user-agent=Mozilla/5.0')
-            m3u.append(f'#EXTVLCOPT:http-referrer={self.baseurl}')
-            m3u.append(f'{self.baseurl}{ch}.m3u8')
-        return "\n".join(m3u)
+# Çalışan referer siteleri (denge66’dan başlıyor)
+sites = [f"https://dengetv{i}.live/" for i in range(66, 170)]
 
-    def save_m3u(self):
-        content = self.build_m3u()
-        with open(self.ana_m3u_dosyasi, "w", encoding="utf-8") as f:
-            f.write(content)
-        print(f"✅ {self.ana_m3u_dosyasi} kaydedildi.")
+baseurl = None
+for site in sites:
+    try:
+        # domain.php veya baseurl endpoint'i
+        r = requests.get(site + "domain.php", timeout=5)
+        if r.status_code == 200:
+            data = r.json()
+            baseurl = data.get("baseurl")
+            if baseurl:
+                print(f"✅ Çalışan referer bulundu: {site}")
+                break
+    except Exception as e:
+        print(f"❌ {site} kontrol ediliyor... Hata: {e}")
 
-if __name__ == "__main__":
-    manager = ZirvedesinM3U("M3U/osibusidengedeneme.m3u")
-    manager.save_m3u()
+if not baseurl:
+    print("❌ Hiçbir baseurl bulunamadı. Script durdu.")
+    exit(1)
+
+# Kanal id’leri
+kanallar = [
+    "yayinzirve", "yayin1", "yayininat", "yayinb2", "yayinb3", "yayinb4",
+    "yayinb5", "yayinbm1", "yayinbm2", "yayinss", "yayinss2", "yayint1",
+    "yayint2", "yayint3", "yayinsmarts", "yayinsms2", "yayintrtspor",
+    "yayintrtspor2", "yayintrt1", "yayinas", "yayinatv", "yayintv8",
+    "yayintv85", "yayinf1", "yayinnbatv", "yayineu1", "yayineu2",
+    "yayinex1", "yayinex2", "yayinex3", "yayinex4", "yayinex5",
+    "yayinex6", "yayinex7", "yayinex8"
+]
+
+# M3U yazma
+with open(m3u_file, "w", encoding="utf-8") as f:
+    f.write("#EXTM3U\n")
+    for kanal in kanallar:
+        url = f"{baseurl}{kanal}.m3u8"
+        f.write(f"#EXTINF:-1 group-title=\"Dengetv54\", {kanal}\n")
+        f.write("#EXTVLCOPT:http-user-agent=Mozilla/5.0\n")
+        f.write(f"#EXTVLCOPT:http-referrer={baseurl}\n")
+        f.write(url + "\n")
+
+print(f"💾 M3U dosyası kaydedildi: {m3u_file}")
