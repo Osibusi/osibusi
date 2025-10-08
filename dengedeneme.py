@@ -7,8 +7,8 @@ os.makedirs("M3U", exist_ok=True)
 # Kanal listesi
 kanallar = {
     "yayinzirve": "Bein sports 1",
-    "yayin1": "TRGOALS",
-    "yayininat": "İnatTv",
+    "yayin1": "Bein 1 TRGOALS",
+    "yayininat": "Bein 1 İnatTv",
     "yayinb2": "Bein Sports 2",
     "yayinb3": "Bein Sports 3",
     "yayinb4": "Bein Sports 4",
@@ -17,9 +17,9 @@ kanallar = {
     "yayinbm2": "Bein Sports Max 2",
     "yayinss": "SSPORT 1",
     "yayinss2": "SSPORT 2",
-    "yayint1": "TİVİBU 1",
-    "yayint2": "TİVİBU 2",
-    "yayint3": "TİVİBU 3",
+    "yayint1": "TİVİBU SPOR 1",
+    "yayint2": "TİVİBU SPOR 2",
+    "yayint3": "TİVİBU SPOR 3",
     "yayinsmarts": "SMART SPOR ",
     "yayinsms2": "SMART SPOR 2",
     "yayintrtspor": "TRT SPOR",
@@ -27,20 +27,20 @@ kanallar = {
     "yayintrt1": "TRT 1 ",
     "yayinas": "A SPOR",
     "yayinatv": "ATV",
-    "yayintv8": "TV8",
+    "yayintv8": "TV 8",
     "yayintv85": "TV 8.5",
     "yayinf1": "SKY SPORTS",
     "yayinnbatv": "NBA TV",
     "yayineu1": "EUROSPORT 1",
     "yayineu2": "EUROSPORT 2",
-    "yayinex1": "TABİ SPOR 1",
-    "yayinex2": "TABİ SPOR 2",
-    "yayinex3": "TABİ SPOR 3",
-    "yayinex4": "TABİ SPOR 4",
-    "yayinex5": "TABİ SPOR 5",
-    "yayinex6": "TABİ SPOR 6",
-    "yayinex7": "TABİ SPOR",
-    "yayinex8": "TABİ SPOR 8"
+    "yayinex1": "TABİİ SPOR 1",
+    "yayinex2": "TABİİ SPOR 2",
+    "yayinex3": "TABİİ SPOR 3",
+    "yayinex4": "TABİİ SPOR 4",
+    "yayinex5": "TABİİ SPOR 5",
+    "yayinex6": "TABİİ SPOR 6",
+    "yayinex7": "TABİİ SPOR",
+    "yayinex8": "TABİİ SPOR 8"
 }
 
 # Gerçek M3U8 linklerinin base URL'si
