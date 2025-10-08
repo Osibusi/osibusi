@@ -6,15 +6,15 @@ os.makedirs("M3U", exist_ok=True)
 
 # Kanal listesi
 kanallar = {
-    "yayinzirve": "Yayinzirve",
+    "yayinzirve": "Bein sports 1",
     "yayin1": "TRGOALS",
-    "yayininat": "Yayininat",
-    "yayinb2": "BEINSPOR 2",
-    "yayinb3": "BEINSPOR 3",
-    "yayinb4": "BEINSPOR 4",
-    "yayinb5": "BEINSPOR 5",
-    "yayinbm1": "BEINMAX 1",
-    "yayinbm2": "BEINMAX 2",
+    "yayininat": "İnatTv",
+    "yayinb2": "Bein Sports 2",
+    "yayinb3": "Bein Sports 3",
+    "yayinb4": "Bein Sports 4",
+    "yayinb5": "Bein Sports 5",
+    "yayinbm1": "Bein Sports Max 1",
+    "yayinbm2": "Bein Sports Max 2",
     "yayinss": "SSPORT 1",
     "yayinss2": "SSPORT 2",
     "yayint1": "TİVİBU 1",
