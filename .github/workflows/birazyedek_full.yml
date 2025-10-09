@@ -30,11 +30,11 @@ jobs:
       - name: birazyedek_full.py Çalıştır
         run: python birazyedek_full.py
 
-      # 5️⃣ Değişiklikleri git'e ekle ve push et
+      # 5️⃣ Değişiklikleri git'e ekle ve push et (güvenli)
       - name: Değişiklikleri Git'e Ekle ve Push Et
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add M3U/Osibusibirazfull.m3u
-          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
-          git push origin main
+          git add M3U/Osibusibirazfull.m3u || echo "Dosya yok, git add atlanıyor"
+          git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok veya dosya yok"
+          git push origin main || echo "Push atlanıyor"
