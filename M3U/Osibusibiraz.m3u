@@ -77,15 +77,42 @@ https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlive
 #EXTINF:-1 group-title="Birazcikspor", HT Spor
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveht.m3u8
-#EXTINF:-1 group-title="Birazcikspor", AT TV █
+#EXTINF:-1 group-title="Birazcikspor", AT TV 
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetjk.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Channel 233
+#EXTINF:-1 group-title="Birazcikspor", A2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Channel 234
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivea2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Cbc sport
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://bllovdes.d4ssgk.su/o1/stream234/playlist.m3u8
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivecbcs.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 3
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 4
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn4.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 5
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn5.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 6
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn6.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 7
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn7.m3u8
+#EXTINF:-1 group-title="Birazcikspor", EXXEN 8
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveexn8.m3u8
+#EXTINF:-1 group-title="Birazcikspor", IDMAN TV
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveidm.m3u8
 #EXTINF:-1 group-title="Birazcikspor_OSI", Güncel Domain
 https://birazcikspor29.xyz/
-# Generated: 2025-10-09 19:05:07
+# Generated: 2025-10-09 19:23:30
