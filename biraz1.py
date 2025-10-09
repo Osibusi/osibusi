@@ -36,7 +36,7 @@ class OSIsportsManager:
         self.channel_names = {
             "androstreamlivebs1": "beIN Sports 1",
             "androstreamlivebs2": "beIN Sports 2",
-            "androstreamlivebs2": "beIN Sports 3",
+            "androstreamlivebs3": "beIN Sports 3",
             "androstreamlivebs4": "beIN Sports 4",
             "androstreamlivebs5": "beIN Sports 5",
             "androstreamlivebsm1": "beIN Sports Max 1",
