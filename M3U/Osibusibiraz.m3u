@@ -1,31 +1,91 @@
 #EXTM3U
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs1
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs2
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs3
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs4
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs4.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs5
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs4.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivebs5.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets1
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs5.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets2
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebsm1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivets3
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebsm2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
-https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/androstreamlivets3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivechstream233
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivets1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivets2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tivibu Spor 3
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivets3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Smart Spor 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivesm1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Smart Spor 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivesm2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Eurosport 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivees1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Eurosport 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivees2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tabi 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tabi 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tabi 3
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb3.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tabi 4
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb4.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Tabi 5
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb5.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Sports 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivess1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Sports 2
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivess2.m3u8
+#EXTINF:-1 group-title="Birazcikspor", ® Fenerbahçe Live
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivefb.m3u8
+#EXTINF:-1 group-title="Birazcikspor", TRT 1
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetrt1.m3u8
+#EXTINF:-1 group-title="Birazcikspor", TV8
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetv8.m3u8
+#EXTINF:-1 group-title="Birazcikspor", TRT Spor
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetrts.m3u8
+#EXTINF:-1 group-title="Birazcikspor", HT Spor
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveht.m3u8
+#EXTINF:-1 group-title="Birazcikspor", AT TV █
+#EXTVLCOPT:http-user-agent=Mozilla/5.0
+https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetjk.m3u8
+#EXTINF:-1 group-title="Birazcikspor", Channel 233
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://bllovdes.d4ssgk.su/o1/stream233/playlist.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Androstreamlivechstream234
+#EXTINF:-1 group-title="Birazcikspor", Channel 234
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://bllovdes.d4ssgk.su/o1/stream234/playlist.m3u8
+#EXTINF:-1 group-title="Birazcikspor_OSI", Güncel Domain
+https://birazcikspor29.xyz/
+# Generated: 2025-10-09 19:05:07
