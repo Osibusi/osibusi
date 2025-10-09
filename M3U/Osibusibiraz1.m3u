@@ -1,23 +1,23 @@
 #EXTM3U
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 1
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 2
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 3
+#EXTINF:-1 group-title="Birazcikspor", Androstreamlivebs3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 4
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs4.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Live 5
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebs5.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 1
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports Max 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebsm1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Bein Spor Max 2
+#EXTINF:-1 group-title="Birazcikspor", beIN Sports Max 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivebsm2.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Tivibu Spor 1
@@ -41,19 +41,19 @@ https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlive
 #EXTINF:-1 group-title="Birazcikspor", Eurosport 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivees2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tabi 1
+#EXTINF:-1 group-title="Birazcikspor", Tabii Spor 1
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb1.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tabi 2
+#EXTINF:-1 group-title="Birazcikspor", Tabii Spor 2
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb2.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tabi 3
+#EXTINF:-1 group-title="Birazcikspor", Tabii Spor 3
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb3.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tabi 4
+#EXTINF:-1 group-title="Birazcikspor", Tabii Spor 4
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb4.m3u8
-#EXTINF:-1 group-title="Birazcikspor", Tabi 5
+#EXTINF:-1 group-title="Birazcikspor", Tabii Spor 5
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlivetb5.m3u8
 #EXTINF:-1 group-title="Birazcikspor", Sports 1
@@ -115,4 +115,4 @@ https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamlive
 https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/androstreamliveidm.m3u8
 #EXTINF:-1 group-title="Birazcikspor_OSI", Güncel Domain
 https://birazcikspor29.xyz/
-# Generated: 2025-10-09 19:23:20
+# Generated: 2025-10-09 20:16:50
