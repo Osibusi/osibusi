@@ -14,40 +14,25 @@ class OSIsportsManager:
         self.start_number = start_number
         self.max_attempts = max_attempts
 
-        # Kanal ID’leri listesi
+      
+        # Kanal ID’leri
         self.channel_ids = [
-            "androstreamlivebs1",
-            "androstreamlivebs2",
-            "androstreamlivebs3",
-            "androstreamlivebs4",
-            "androstreamlivebs5",
-            "androstreamlivebsm1",
-            "androstreamlivebsm2",
-            "androstreamlivets1",
-            "androstreamlivets2",
-            "androstreamlivets3",
-            "androstreamlivesm1",
-            "androstreamlivesm2",
-            "androstreamlivees1",
-            "androstreamlivees2",
-            "androstreamlivetb1",
-            "androstreamlivetb2",
-            "androstreamlivetb3",
-            "androstreamlivetb4",
-            "androstreamlivetb5",
-            "androstreamlivess1",
-            "androstreamlivess2",
-            "androstreamlivefb",
-            "androstreamlivetrt1",
-            "androstreamlivetv8",
-            "androstreamlivetrts",
-            "androstreamliveht",
-            "androstreamlivetjk",
-            "androstreamlivechstream233",
-            "androstreamlivechstream234"
+            "androstreamlivebs1", "androstreamlivebs2", "androstreamlivebs3",
+            "androstreamlivebs4", "androstreamlivebs5", "androstreamlivebsm1",
+            "androstreamlivebsm2", "androstreamlivets1", "androstreamlivets2",
+            "androstreamlivets3", "androstreamlivesm1", "androstreamlivesm2",
+            "androstreamlivees1", "androstreamlivees2", "androstreamlivetb1",
+            "androstreamlivetb2", "androstreamlivetb3", "androstreamlivetb4",
+            "androstreamlivetb5", "androstreamlivess1", "androstreamlivess2",
+            "androstreamlivefb", "androstreamlivetrt1", "androstreamlivetv8",
+            "androstreamlivetrts", "androstreamliveht", "androstreamlivetjk",
+            "androstreamlivea2", "androstreamlivecbcs","androstreamliveexn1",
+            "androstreamliveexn2","androstreamliveexn3","androstreamliveexn4",
+            "androstreamliveexn5","androstreamliveexn6","androstreamliveexn7",
+            "androstreamliveexn8","androstreamliveidm",
         ]
 
-        # Kanallara özel isim atamak için dictionary
+        # Kanal isimleri
         self.channel_names = {
             "androstreamlivebs1": "Bein Spor Live 1",
             "androstreamlivebs2": "Bein Spor Live 2",
@@ -56,13 +41,13 @@ class OSIsportsManager:
             "androstreamlivebs5": "Bein Spor Live 5",
             "androstreamlivebsm1": "Bein Spor Max 1",
             "androstreamlivebsm2": "Bein Spor Max 2",
-            "androstreamlivets1": "Tivibu Spor Live 1",
-            "androstreamlivets2": "Tivibu Spor Live 2",
-            "androstreamlivets3": "Tivibu Spor Live 3",
+            "androstreamlivets1": "Tivibu Spor 1",
+            "androstreamlivets2": "Tivibu Spor 2",
+            "androstreamlivets3": "Tivibu Spor 3",
             "androstreamlivesm1": "Smart Spor 1",
             "androstreamlivesm2": "Smart Spor 2",
-            "androstreamlivees1": "Eurosport Live 1",
-            "androstreamlivees2": "Eurosport Live 2",
+            "androstreamlivees1": "Eurosport 1",
+            "androstreamlivees2": "Eurosport 2",
             "androstreamlivetb1": "Tabi 1",
             "androstreamlivetb2": "Tabi 2",
             "androstreamlivetb3": "Tabi 3",
@@ -72,12 +57,22 @@ class OSIsportsManager:
             "androstreamlivess2": "Sports 2",
             "androstreamlivefb": "® Fenerbahçe Live",
             "androstreamlivetrt1": "TRT 1",
-            "androstreamlivetv8": "Tv 8",
+            "androstreamlivetv8": "TV8",
             "androstreamlivetrts": "TRT Spor",
             "androstreamliveht": "HT Spor",
-            "androstreamlivetjk": "AT TV █",
-            "androstreamlivechstream233": "Channel 233",
-            "androstreamlivechstream234": "Channel 234"
+            "androstreamlivetjk": "AT TV ",
+            "androstreamlivea2": "A2",
+            "androstreamlivecbcs": "Cbc sport",
+            "androstreamliveexn1": "EXXEN 1",
+            "androstreamliveexn2": "EXXEN 2",
+            "androstreamliveexn3": "EXXEN 3",
+            "androstreamliveexn4": "EXXEN 4",
+            "androstreamliveexn5": "EXXEN 5",
+            "androstreamliveexn6": "EXXEN 6",
+            "androstreamliveexn7": "EXXEN 7",
+            "androstreamliveexn8": "EXXEN 8",
+            "androstreamliveidm": "IDMAN TV",
+         
         }
 
         self.baseurls = [
