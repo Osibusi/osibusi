@@ -33,13 +33,13 @@ kanallar = {
     "yayinnbatv": "NBA TV",
     "yayineu1": "EUROSPORT 1",
     "yayineu2": "EUROSPORT 2",
+    "yayinex7": "TABİİ SPOR",
     "yayinex1": "TABİİ SPOR 1",
     "yayinex2": "TABİİ SPOR 2",
     "yayinex3": "TABİİ SPOR 3",
     "yayinex4": "TABİİ SPOR 4",
     "yayinex5": "TABİİ SPOR 5",
-    "yayinex6": "TABİİ SPOR 6",
-    "yayinex7": "TABİİ SPOR",
+    "yayinex6": "TABİİ SPOR 6", 
     "yayinex8": "TABİİ SPOR 8"
 }
 
