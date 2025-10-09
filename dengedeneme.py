@@ -8,7 +8,7 @@ os.makedirs("M3U", exist_ok=True)
 kanallar = {
     "yayinzirve": "BEIN SPORTS 1",
     "yayin1": "Bein 1 TRGOALS",
-    "yayininat": "BEIN 1  1 İnatTv",
+    "yayininat": "BEIN 1 İnatTv",
     "yayinb2": "BEIN Sports 2",
     "yayinb3": "BEIN Sports 3",
     "yayinb4": "BEIN Sports 4",
@@ -23,7 +23,7 @@ kanallar = {
     "yayinsmarts": "SMART SPOR ",
     "yayinsms2": "SMART SPOR 2",
     "yayintrtspor": "TRT SPOR",
-    "yayintrtspor2": "TRT SPOR 2",
+    "yayintrtspor2": "TRT SPOR YILDIZ",
     "yayintrt1": "TRT 1 HD",
     "yayinas": "A SPOR HD",
     "yayinatv": "ATV",
