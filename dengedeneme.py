@@ -70,7 +70,7 @@ m3u_path = "M3U/osibusidengedeneme.m3u"
 with open(m3u_path, "w", encoding="utf-8") as f:
     f.write("#EXTM3U\n")
     for kanal_id, kanal_name in kanallar.items():
-        f.write(f"#EXTINF:-1 group-title=\"Dengetv54\",{kanal_name}\n")
+        f.write(f"#EXTINF:-1 group-title=\"Osibusi\",{kanal_name}\n")
         f.write("#EXTVLCOPT:http-user-agent=Mozilla/5.0\n")
         f.write(f"#EXTVLCOPT:http-referrer={working_domain}\n")
         f.write(f"{base_url}{kanal_id}.m3u8\n")
