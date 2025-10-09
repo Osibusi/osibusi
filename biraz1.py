@@ -81,8 +81,8 @@ class OSIsportsManager:
         }
 
         self.baseurls = [
-            f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/",
-            f"https://wandering-pond-{random.randint(1000,9999)}.andorrmaid278.workers.dev/checklist/"
+            f"https://wandering-pond-{random.randint(1000,9999)}.androsd2390asd.workers.dev/checklist/",
+            f"https://wandering-pond-{random.randint(1000,9999)}.androsd2390asd.workers.dev/checklist/"
         ]
 
         self.headers = {"User-Agent": "Mozilla/5.0"}
@@ -90,17 +90,17 @@ class OSIsportsManager:
 
     def detect_worker_base(self):
         """Sitedeki güncel worker ID’yi tespit eder"""
-        test_url = "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
+        test_url = "https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/"
         try:
             r = self.client.get(test_url, headers=self.headers)
-            match = re.search(r"https://wandering-pond-([0-9a-z]+)\.andorrmaid278\.workers\.dev", r.text)
+            match = re.search(r"https://wandering-pond-([0-9a-z]+)\.androsd2390asd\.workers\.dev", r.text)
             if match:
                 worker_id = match.group(1)
                 print(f"✅ Güncel worker ID bulundu: {worker_id}")
-                return f"https://wandering-pond-{worker_id}.andorrmaid278.workers.dev/checklist/"
+                return f"https://wandering-pond-{worker_id}.androsd2390asd.workers.dev/checklist/"
         except Exception as e:
             print(f"⚠️ Worker ID tespiti başarısız: {e}")
-        return "https://wandering-pond-ff44.andorrmaid278.workers.dev/checklist/"
+        return "https://wandering-pond-ff44.androsd2390asd.workers.dev/checklist/"
 
     def setup_git_identity(self):
         """CI ortamında git commit için kullanıcı bilgilerini ayarlar"""
