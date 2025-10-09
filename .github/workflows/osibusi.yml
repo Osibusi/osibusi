@@ -2,7 +2,7 @@ name: Osibusi TRGOALS IPTV Otomatik
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # Her 3 saatte bir
+    - cron: "0 */3 * * *" # Her 12 saatte bir
   workflow_dispatch: # Manuel çalıştırma
 
 jobs:
