@@ -24,7 +24,7 @@ jobs:
       - name: Python Bağımlılıkları Kur
         run: |
           python -m pip install --upgrade pip
-          python -m pip install requests bs4 lxml
+          python -m pip install requests bs4 lxml httpx
 
       # 4️⃣ Script'i çalıştır
       - name: birazyedek_full.py Çalıştır
