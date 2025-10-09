@@ -7,7 +7,7 @@ https://audi.zirvedesin19.sbs/yayinzirve.m3u8
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayin1.m3u8
-#EXTINF:-1 group-title="Dengetv54",BEIN 1  1 İnatTv
+#EXTINF:-1 group-title="Dengetv54",BEIN 1 İnatTv
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayininat.m3u8
@@ -67,7 +67,7 @@ https://audi.zirvedesin19.sbs/yayinsms2.m3u8
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintrtspor.m3u8
-#EXTINF:-1 group-title="Dengetv54",TRT SPOR 2
+#EXTINF:-1 group-title="Dengetv54",TRT SPOR YILDIZ
 #EXTVLCOPT:http-user-agent=Mozilla/5.0
 #EXTVLCOPT:http-referrer=https://dengetv66.live/
 https://audi.zirvedesin19.sbs/yayintrtspor2.m3u8
