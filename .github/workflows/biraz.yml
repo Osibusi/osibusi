@@ -24,7 +24,7 @@ jobs:
 
       - name: ▶️ OSIBUSI Script Çalıştır
         run: |
-          echo '🚀 bira1.py çalıştırılıyor...'
+          echo '🚀 biraz.py çalıştırılıyor...'
           python biraz.py
           echo '✅ Script tamamlandı.'
           ls -R M3U || echo '⚠️ M3U klasörü boş olabilir.'
