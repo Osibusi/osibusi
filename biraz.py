@@ -25,7 +25,10 @@ class OSIsportsManager:
             "androstreamlivetb5", "androstreamlivess1", "androstreamlivess2",
             "androstreamlivefb", "androstreamlivetrt1", "androstreamlivetv8",
             "androstreamlivetrts", "androstreamliveht", "androstreamlivetjk",
-            "androstreamlivechstream233", "androstreamlivechstream234"
+            "androstreamlivea2", "androstreamlivecbcs","androstreamliveexn1",
+            "androstreamliveexn2","androstreamliveexn3","androstreamliveexn4",
+            "androstreamliveexn5","androstreamliveexn6","androstreamliveexn7",
+            "androstreamliveexn8","androstreamliveidm",
         ]
 
         # Kanal isimleri
@@ -56,9 +59,19 @@ class OSIsportsManager:
             "androstreamlivetv8": "TV8",
             "androstreamlivetrts": "TRT Spor",
             "androstreamliveht": "HT Spor",
-            "androstreamlivetjk": "AT TV █",
-            "androstreamlivechstream233": "Channel 233",
-            "androstreamlivechstream234": "Channel 234"
+            "androstreamlivetjk": "AT TV ",
+            "androstreamlivea2": "A2",
+            "androstreamlivecbcs": "Cbc sport",
+            "androstreamliveexn1": "EXXEN 1",
+            "androstreamliveexn2": "EXXEN 2",
+            "androstreamliveexn3": "EXXEN 3",
+            "androstreamliveexn4": "EXXEN 4",
+            "androstreamliveexn5": "EXXEN 5",
+            "androstreamliveexn6": "EXXEN 6",
+            "androstreamliveexn7": "EXXEN 7",
+            "androstreamliveexn8": "EXXEN 8",
+            "androstreamliveidm": "IDMAN TV",
+            
         }
 
         self.headers = {"User-Agent": "Mozilla/5.0"}
