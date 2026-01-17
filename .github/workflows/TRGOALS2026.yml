@@ -1,4 +1,4 @@
-name: Osibusi TRGOALS IPTV Otomatik
+name: 2026 TRGOALS IPTV Otomatik
 
 on:
   schedule:
@@ -23,12 +23,12 @@ jobs:
 
       - name: OSIBUSI Script Çalıştır
         run: |
-          python osibusi.py
+          python trgoals2026.py
 
       - name: Playlist'i Commit Et
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add OSIBUSITRGOALSS.m3u
+          git add TRGOALS2026.m3u
           git commit -m "Otomatik güncelleme: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Değişiklik yok"
           git push
